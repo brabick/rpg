@@ -1,5 +1,5 @@
 from random import randint
-import rpg_db
+
 
 # This is not pokemon
 # the only types so far
@@ -143,14 +143,7 @@ def is_dead(mon):
 
 # creates first attacks
 
-fire_attack = create_attack('fire attack', 'fire', 10)
-water_attack = create_attack('water attack', 'water', 10)
-grass_attack = create_attack('grass attack', 'grass', 10)
-char_attacks = [fire_attack, water_attack, grass_attack]
-ven_attacks = [fire_attack, grass_attack]
-Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
-Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, char_attacks)
-Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
+
 
 # print(Blastoise.mon_type1)
 #print(attack_list)
@@ -165,7 +158,8 @@ Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 # print(combat3)
 
 # first battle
-venblas = battle.turn1(battle, Venusaur, Blastoise, ven_attacks, char_attacks)
+#venblas = battle.turn1(battle, Venusaur, mon_creation.Blastoise, mon_creation.ven_attacks, mon_creation.blastoise_attacks)
+
 # venblas2 = battle.turn2(battle, Venusaur, Blastoise, grass_attack, water_attack)
 # print(venblas)
 
