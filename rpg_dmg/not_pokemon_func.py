@@ -1,3 +1,10 @@
+# ---------------------------------------------------- *
+# Author: Brandon Bickerton
+# Python Version: 3.7.2
+# Description: This is meant to be a basic version of battling
+# based on the Pokemon game series.  This is designed to be easily expandable.
+
+
 from random import randint
 
 
@@ -141,8 +148,40 @@ def is_dead(mon):
         mon.hp_stat = 0
 
 
-# creates first attacks
+# ------------------------------------------------------------------------ #
+# The large section above is all about creating the functions.  Below will
+# Be the section where I use the functions to create Attacks and Pokemon
+# ------------------------------------------------------------------------ #
 
+# ------------------------------------------------------------------------ #
+# creates first attacks.
+# Format: func(attack name, attack type, attack power)
+# ------------------------------------------------------------------------ #
+
+blastburn = create_attack('Blast Burn', 'fire', 25)
+hydrocannon = create_attack('Hydro Cannon', 'water', 25)
+grassattack = create_attack('Frenzy Plant', 'grass', 25)
+fireblast = create_attack('Fire Blast', 'fire', 20)
+hydropump = create_attack('Hydro Pump', 'water', 20)
+solarbeam = create_attack('Solar Beam', 'grass', 20)
+
+# ------------------------------------------------------------------------ #
+# creates list of attacks for each mon.
+# ------------------------------------------------------------------------ #
+
+char_attacks = [blastburn, hydrocannon, grassattack]
+ven_attacks = [solarbeam, grassattack, hydropump]
+blas_attacks = [hydrocannon, hydropump, fireblast]
+
+# ------------------------------------------------------------------------ #
+# creates pokemon.
+# Format: func(Mon name, mon type1, mon type 2, hp,
+# attack, speed, attack list)
+# ------------------------------------------------------------------------ #
+
+Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
+Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, char_attacks)
+Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 
 
 # print(Blastoise.mon_type1)
@@ -150,12 +189,6 @@ def is_dead(mon):
 # print(grass_attack[1])
 # print(Venusaur.stats)
 
-# combat1 = super_effective('grass', 'grass')
-# print(combat1)
-# combat2 = super_effective('fire', 'water')
-# print(combat2)
-# combat3 = super_effective('grass', 'water')
-# print(combat3)
 
 # first battle
 #venblas = battle.turn1(battle, Venusaur, mon_creation.Blastoise, mon_creation.ven_attacks, mon_creation.blastoise_attacks)
@@ -170,3 +203,5 @@ def is_dead(mon):
 #for i in Venusaur.mon_attack_list:
     #print(i.attack_name)
 
+if __name__ == "main":
+    pass
