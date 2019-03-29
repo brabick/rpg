@@ -77,7 +77,17 @@ class battle:
                 attack1 = i
                 #return attack1
 
-                attack2 = mon2.mon_attack_list[randint(0,1)]
+                attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
+                dmg_calc.dmg_done_calc(mon1, mon2, attack1)
+                is_dead(mon2)
+                print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
+                                                                                     mon2.mon_name, dmg_calc.dmg_done,
+                                                                                     mon2.hp_stat))
+            elif attack1 != i.attack_name:
+                attack1 = input("Enter an attack in the attack list")
+                attack1 = i
+
+                attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
                 dmg_calc.dmg_done_calc(mon1, mon2, attack1)
                 is_dead(mon2)
                 print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
@@ -87,6 +97,8 @@ class battle:
             print('dead ' + mon2.mon_name)
         else:
             battle.turn2(self, mon1, mon2, attack1, attack2)
+
+
 
     def turn2(self, mon1, mon2, attack1, attack2):
         dmg_calc.dmg_done_calc(mon2, mon1, attack2)
@@ -163,7 +175,7 @@ hydrocannon = create_attack('Hydro Cannon', 'water', 25)
 grassattack = create_attack('Frenzy Plant', 'grass', 25)
 fireblast = create_attack('Fire Blast', 'fire', 20)
 hydropump = create_attack('Hydro Pump', 'water', 20)
-solarbeam = create_attack('Solar Beam', 'grass', 20)
+solarbeam = create_attack('Solarbeam', 'grass', 20)
 
 # ------------------------------------------------------------------------ #
 # creates list of attacks for each mon.
@@ -180,7 +192,7 @@ blas_attacks = [hydrocannon, hydropump, fireblast]
 # ------------------------------------------------------------------------ #
 
 Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
-Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, char_attacks)
+Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 
 
