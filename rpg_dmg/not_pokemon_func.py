@@ -70,7 +70,7 @@ class battle:
             # trying to get user input for the attacks
             # try if statement?  if input == attack name
 
-        attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ')
+        attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
         for i in mon1.mon_attack_list:
             #for j in mon1.mon_attack_list.attack_name:
             if attack1 == i.attack_name:
@@ -83,16 +83,7 @@ class battle:
                 print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
                                                                                      mon2.mon_name, dmg_calc.dmg_done,
                                                                                      mon2.hp_stat))
-            elif attack1 != i.attack_name:
-                attack1 = input("Enter an attack in the attack list")
-                attack1 = i
 
-                attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
-                dmg_calc.dmg_done_calc(mon1, mon2, attack1)
-                is_dead(mon2)
-                print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
-                                                                                     mon2.mon_name, dmg_calc.dmg_done,
-                                                                                     mon2.hp_stat))
         if mon2.dead == True:
             print('dead ' + mon2.mon_name)
         else:
