@@ -1,13 +1,12 @@
-# ---------------------------------------------------- #
+# ------------------------------------------------------------------------ #
 # Author: Brandon Bickerton
 # Python Version: 3.7.2
 # Description: This is meant to be a basic version of battling
 # based on the Pokemon game series.
 # This is designed to be easily expandable.
-# ---------------------------------------------------- #
+# ------------------------------------------------------------------------ #
 
 from random import randint
-
 
 # This is not pokemon
 # the only types so far
@@ -17,6 +16,12 @@ attack_list = []
 # creating the pokemon class
 mon_list = []
 
+
+# ------------------------------------------------------------------------ #
+# Initial class used to make pokemon
+# Initializes variables to make them accesable later in
+# Program
+# ------------------------------------------------------------------------ #
 
 class mon:
     # default dead = false
@@ -37,7 +42,11 @@ class mon:
     def __str__(self):
         return str(self.__dict__), str(self.__class__), str(self.mon_attack_list)
 
+
+# ------------------------------------------------------------------------ #
 # creating attacks and adding them to the attack_list
+# ------------------------------------------------------------------------ #
+
 class create_attack:
     def __init__(self, attack_name, attack_type, attack_power):
         self.attack_name = attack_name
@@ -47,6 +56,15 @@ class create_attack:
         attack = {'attack name': attack_name, 'attack type': attack_type, 'attack_power': attack_power}
         attack_list.append(attack)
 
+
+# ------------------------------------------------------------------------ #
+# The battle class is the most complex part of the program
+# There are two turns that call upon each other
+# Turn 1 is where the user will type in the name of the
+# attack for their mon to use.
+# Turn 2 has the opposing mon (which will end up being chosen
+# at random) use a random move.
+# ------------------------------------------------------------------------ #
 
 class battle:
     def __init__(self, mon1, mon2, attack1, attack2, damage_done):
@@ -64,23 +82,30 @@ class battle:
     def turn1(self, mon1, mon2, attack1, attack2):
         for i in mon1.mon_attack_list:
             print(mon1.mon_name + ' has ' + ' ' + i.attack_name)
+
+        attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
+        for i in mon1.mon_attack_list:
+            # for j in mon1.mon_attack_list.attack_name:
+            if attack1 == i.attack_name:
+                attack1 = i
+
+        attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
+
         try:
+            dmg_calc.dmg_done_calc(mon1, mon2, attack1)
+        except AttributeError:
+            print("Please enter an attack from the attack list.")
             attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
             for i in mon1.mon_attack_list:
                 # for j in mon1.mon_attack_list.attack_name:
                 if attack1 == i.attack_name:
                     attack1 = i
-
-                    attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
-                    dmg_calc.dmg_done_calc(mon1, mon2, attack1)
-                    is_dead(mon2)
-                    print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
-                                                                                         mon2.mon_name, dmg_calc.dmg_done,
-                                                                                 mon2.hp_stat))
-        except AttributeError:
-            print("Please enter an attack in the attack list")
         finally:
-            print("idk")
+            is_dead(mon2)
+            print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
+                                                                                 mon2.mon_name, dmg_calc.dmg_done,
+                                                                                 mon2.hp_stat))
+
             if mon2.dead == True:
                 print('dead ' + mon2.mon_name)
             else:
@@ -97,11 +122,26 @@ class battle:
         else:
             battle.turn1(self, mon1, mon2, attack1, attack2)
 
+    # def attack_selection(self, mon1):
+
+
+# ------------------------------------------------------------------------ #
+# spd_check will end up being used to determine which
+# mon goes first.  This has not been implemented yet
+# ------------------------------------------------------------------------ #
+
 def spd_check(mon1, mon2):
     if mon1.spd_stat > mon2.spd_stat:
         return True
     else:
         return False
+
+
+# ------------------------------------------------------------------------ #
+# dmg_calc is a simple equation to determine the battle
+# that is done.  It is called in both turns using the
+# opposing mon's attack stats and attack power
+# ------------------------------------------------------------------------ #
 
 
 class dmg_calc:
@@ -118,6 +158,12 @@ class dmg_calc:
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
         # damage_formula = move_attack_power + super_effective * 1/2 mon_atk_stat
+
+
+# ------------------------------------------------------------------------ #
+# Simple damage chart that is used to determine if the
+# damage done by an attack is doubled or halved
+# ------------------------------------------------------------------------ #
 
 
 def super_effective(attack_type, mon_type):
@@ -143,7 +189,6 @@ def is_dead(mon):
     if mon.hp_stat <= 0:
         mon.dead = True
         mon.hp_stat = 0
-
 
 
 # ------------------------------------------------------------------------ #
@@ -181,25 +226,24 @@ Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
 Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 
-
 # print(Blastoise.mon_type1)
-#print(attack_list)
+# print(attack_list)
 # print(grass_attack[1])
 # print(Venusaur.stats)
 
 
 # first battle
-#venblas = battle.turn1(battle, Venusaur, mon_creation.Blastoise, mon_creation.ven_attacks, mon_creation.blastoise_attacks)
+# venblas = battle.turn1(battle, Venusaur, mon_creation.Blastoise, mon_creation.ven_attacks, mon_creation.blastoise_attacks)
 
 # venblas2 = battle.turn2(battle, Venusaur, Blastoise, grass_attack, water_attack)
 # print(venblas)
 
-#print(dmg_calc.dmg_done_calc(Venusaur, Blastoise, grass_attack))
+# print(dmg_calc.dmg_done_calc(Venusaur, Blastoise, grass_attack))
 
-#print(Venusaur.mon_attack_list)
+# print(Venusaur.mon_attack_list)
 
-#for i in Venusaur.mon_attack_list:
-    #print(i.attack_name)
+# for i in Venusaur.mon_attack_list:
+# print(i.attack_name)
 
 if __name__ == "main":
     pass
