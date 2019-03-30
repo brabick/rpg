@@ -1,9 +1,10 @@
-# ---------------------------------------------------- *
+# ---------------------------------------------------- #
 # Author: Brandon Bickerton
 # Python Version: 3.7.2
 # Description: This is meant to be a basic version of battling
-# based on the Pokemon game series.  This is designed to be easily expandable.
-
+# based on the Pokemon game series.
+# This is designed to be easily expandable.
+# ---------------------------------------------------- #
 
 from random import randint
 
@@ -36,9 +37,6 @@ class mon:
     def __str__(self):
         return str(self.__dict__), str(self.__class__), str(self.mon_attack_list)
 
-
-
-
 # creating attacks and adding them to the attack_list
 class create_attack:
     def __init__(self, attack_name, attack_type, attack_power):
@@ -48,7 +46,6 @@ class create_attack:
         # creates attack as list
         attack = {'attack name': attack_name, 'attack type': attack_type, 'attack_power': attack_power}
         attack_list.append(attack)
-
 
 
 class battle:
@@ -67,29 +64,27 @@ class battle:
     def turn1(self, mon1, mon2, attack1, attack2):
         for i in mon1.mon_attack_list:
             print(mon1.mon_name + ' has ' + ' ' + i.attack_name)
-            # trying to get user input for the attacks
-            # try if statement?  if input == attack name
+        try:
+            attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
+            for i in mon1.mon_attack_list:
+                # for j in mon1.mon_attack_list.attack_name:
+                if attack1 == i.attack_name:
+                    attack1 = i
 
-        attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
-        for i in mon1.mon_attack_list:
-            #for j in mon1.mon_attack_list.attack_name:
-            if attack1 == i.attack_name:
-                attack1 = i
-                #return attack1
-
-                attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
-                dmg_calc.dmg_done_calc(mon1, mon2, attack1)
-                is_dead(mon2)
-                print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
-                                                                                     mon2.mon_name, dmg_calc.dmg_done,
-                                                                                     mon2.hp_stat))
-
-        if mon2.dead == True:
-            print('dead ' + mon2.mon_name)
-        else:
-            battle.turn2(self, mon1, mon2, attack1, attack2)
-
-
+                    attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
+                    dmg_calc.dmg_done_calc(mon1, mon2, attack1)
+                    is_dead(mon2)
+                    print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
+                                                                                         mon2.mon_name, dmg_calc.dmg_done,
+                                                                                 mon2.hp_stat))
+        except AttributeError:
+            print("Please enter an attack in the attack list")
+        finally:
+            print("idk")
+            if mon2.dead == True:
+                print('dead ' + mon2.mon_name)
+            else:
+                battle.turn2(self, mon1, mon2, attack1, attack2)
 
     def turn2(self, mon1, mon2, attack1, attack2):
         dmg_calc.dmg_done_calc(mon2, mon1, attack2)
@@ -101,7 +96,6 @@ class battle:
             print('dead ' + mon1.mon_name)
         else:
             battle.turn1(self, mon1, mon2, attack1, attack2)
-
 
 def spd_check(mon1, mon2):
     if mon1.spd_stat > mon2.spd_stat:
@@ -149,6 +143,7 @@ def is_dead(mon):
     if mon.hp_stat <= 0:
         mon.dead = True
         mon.hp_stat = 0
+
 
 
 # ------------------------------------------------------------------------ #
