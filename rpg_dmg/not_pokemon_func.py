@@ -19,7 +19,7 @@ mon_list = []
 
 # ------------------------------------------------------------------------ #
 # Initial class used to make pokemon
-# Initializes variables to make them accesable later in
+# Initializes variables to make them accesible later in
 # Program
 # ------------------------------------------------------------------------ #
 
@@ -48,13 +48,25 @@ class mon:
 # ------------------------------------------------------------------------ #
 
 class create_attack:
-    def __init__(self, attack_name, attack_type, attack_power):
+
+    def __init__(self, attack_name, attack_type, attack_power, mon_attack_list, num_lists_to_add):
         self.attack_name = attack_name
         self.attack_type = attack_type
         self.attack_power = attack_power
+        self.mon_attack_list = mon_attack_list
+        self.num_lists_to_add = num_lists_to_add
         # creates attack as list
-        attack = {'attack name': attack_name, 'attack type': attack_type, 'attack_power': attack_power}
+
+    def make_attack(self, attack_name, attack_type, attack_power, num_lists_to_add):
+        attack = [attack_name, attack_type, attack_power]
         attack_list.append(attack)
+        for i in num_lists_to_add:
+            i = mon_attack_list
+            mon_attack_list.append(attack)
+
+
+    def add_attack(self, attack, mon_attack_list):
+            mon_attack_list.append(attack)
 
 
 # ------------------------------------------------------------------------ #
@@ -67,12 +79,13 @@ class create_attack:
 # ------------------------------------------------------------------------ #
 
 class battle:
-    def __init__(self, mon1, mon2, attack1, attack2, damage_done):
+    def __init__(self, mon1, mon2, attack_list1, attack2, dmg_done):
         self.mon1 = mon1
         self.mon2 = mon2
-        self.attack1 = attack1
+        self.attack_list1 = attack_list1
         self.attack2 = attack2
-        self.damage_done = damage_done
+        self.dmg_done = dmg_done
+
 
     # sets the base_damage to 2. Then checks if
     # super_effective returns true
@@ -80,7 +93,7 @@ class battle:
     # else it is halved
 
     def turn1(self, mon1, mon2, attack1, attack2):
-        for i in mon1.mon_attack_list:
+        """for i in mon1.mon_attack_list:
             print(mon1.mon_name + ' has ' + ' ' + i.attack_name)
 
         attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
@@ -88,41 +101,73 @@ class battle:
             # for j in mon1.mon_attack_list.attack_name:
             if attack1 == i.attack_name:
                 attack1 = i
+                print(i)
+                print(attack1)"""
+
+        battle.attack_selection(self, mon1, attack1)
 
         attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
 
-        try:
-            dmg_calc.dmg_done_calc(mon1, mon2, attack1)
-        except AttributeError:
+        # try:
+        battle.dmg_done_calc(mon1, mon2, attack1)
+
+        '''except AttributeError:
+
             print("Please enter an attack from the attack list.")
-            attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
+            attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! \n').title()
             for i in mon1.mon_attack_list:
                 # for j in mon1.mon_attack_list.attack_name:
                 if attack1 == i.attack_name:
                     attack1 = i
-        finally:
-            is_dead(mon2)
-            print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
-                                                                                 mon2.mon_name, dmg_calc.dmg_done,
-                                                                                 mon2.hp_stat))
+                    print(i)
+                    print(attack1.attack_name)'''
 
-            if mon2.dead == True:
-                print('dead ' + mon2.mon_name)
-            else:
-                battle.turn2(self, mon1, mon2, attack1, attack2)
+        # finally:
+        is_dead(mon2)
+        print('{} used {}. {} took {} damage and has {} hp remaining'
+              .format(mon1.mon_name, attack1[0],
+                      mon2.mon_name, battle.dmg_done,
+                      mon2.hp_stat))
+
+        if mon2.dead == True:
+            print('dead ' + mon2.mon_name)
+        else:
+            battle.turn2(self, mon1, mon2, attack1, attack2)
 
     def turn2(self, mon1, mon2, attack1, attack2):
-        dmg_calc.dmg_done_calc(mon2, mon1, attack2)
+        battle.dmg_done_calc(mon2, mon1, attack2)
         is_dead(mon1)
-        print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon2.mon_name, attack2.attack_name,
-                                                                             mon1.mon_name, dmg_calc.dmg_done,
-                                                                             mon1.hp_stat))
+        print('{} used {}. {} took {} damage and has {} hp remaining \n'.
+              format(mon2.mon_name, attack2[0],
+                     mon1.mon_name, battle.dmg_done,
+                     mon1.hp_stat))
+
         if mon1.dead == True:
             print('dead ' + mon1.mon_name)
         else:
             battle.turn1(self, mon1, mon2, attack1, attack2)
 
-    # def attack_selection(self, mon1):
+    def attack_selection(self, mon1, attack1):
+        for i in mon1.mon_attack_list:
+            print(mon1.mon_name + ' has ' + ' ' + i)
+
+        attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
+        for j in mon1.mon_attack_list:
+            # for j in mon1.mon_attack_list.attack_name:
+            if attack1 == j[0]:
+                attack1 = j
+                print(type(attack1))
+                return attack1
+
+    def dmg_done_calc(mon1, mon2, attack):
+        if super_effective(attack[1], mon2.mon_type1) == True:
+            dmg_done = ((1 / 2 * mon1.atk_stat) + attack[2]) * 2
+            mon2.hp_stat = mon2.hp_stat - dmg_done
+            return mon2.hp_stat, dmg_done
+        else:
+            dmg_done = ((1 / 2 * mon1.atk_stat) + attack[2]) / 2
+            mon2.hp_stat = mon2.hp_stat - dmg_done
+            return mon2.hp_stat, dmg_done
 
 
 # ------------------------------------------------------------------------ #
@@ -144,22 +189,6 @@ def spd_check(mon1, mon2):
 # ------------------------------------------------------------------------ #
 
 
-class dmg_calc:
-    def __init__(self, dmg_done):
-        self.dmg_done = dmg_done
-
-    def dmg_done_calc(mon1, mon2, attack):
-        if super_effective(attack.attack_type, mon2.mon_type1) == True:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * 2
-            mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-            return mon2.hp_stat, dmg_calc.dmg_done
-        else:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) / 2
-            mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-            return mon2.hp_stat
-        # damage_formula = move_attack_power + super_effective * 1/2 mon_atk_stat
-
-
 # ------------------------------------------------------------------------ #
 # Simple damage chart that is used to determine if the
 # damage done by an attack is doubled or halved
@@ -169,16 +198,12 @@ class dmg_calc:
 def super_effective(attack_type, mon_type):
     # used for damage calculation.  If true does double damage. If false does half (for now)
     if mon_type == 'fire' and attack_type == 'water':
-        print('Stopping at fire')
         return True
     elif mon_type == 'water' and attack_type == 'grass':
-        print('Stopping at water')
         return True
     elif mon_type == 'grass' and attack_type == 'fire':
-        print('Stopping at grass')
         return True
     else:
-        print('Stopping at false')
         return False
 
 
@@ -201,20 +226,22 @@ def is_dead(mon):
 # Format: func(attack name, attack type, attack power)
 # ------------------------------------------------------------------------ #
 
-blastburn = create_attack('Blast Burn', 'fire', 25)
-hydrocannon = create_attack('Hydro Cannon', 'water', 25)
-grassattack = create_attack('Frenzy Plant', 'grass', 25)
-fireblast = create_attack('Fire Blast', 'fire', 20)
-hydropump = create_attack('Hydro Pump', 'water', 20)
-solarbeam = create_attack('Solarbeam', 'grass', 20)
+blastburn = create_attack.make_attack(create_attack, 'Blast Burn', 'fire', 25)
+hydrocannon = create_attack.make_attack(create_attack, 'Hydro Cannon', 'water', 25)
+grassattack = create_attack.make_attack(create_attack, 'Frenzy Plant', 'grass', 25)
+fireblast = create_attack.make_attack(create_attack, 'Fire Blast', 'fire', 20)
+hydropump = create_attack.make_attack(create_attack, 'Hydro Pump', 'water', 20)
+solarbeam = create_attack.make_attack(create_attack, 'Solarbeam', 'grass', 20)
 
 # ------------------------------------------------------------------------ #
 # creates list of attacks for each mon.
 # ------------------------------------------------------------------------ #
 
-char_attacks = [blastburn, hydrocannon, grassattack]
-ven_attacks = [solarbeam, grassattack, hydropump]
-blas_attacks = [hydrocannon, hydropump, fireblast]
+char_attacks = []
+ven_attacks = []
+blas_attacks = []
+
+create_attack.add_attack(create_attack, blastburn, char_attacks)
 
 # ------------------------------------------------------------------------ #
 # creates pokemon.
