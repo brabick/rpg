@@ -19,7 +19,7 @@ mon_list = []
 
 # ------------------------------------------------------------------------ #
 # Initial class used to make pokemon
-# Initializes variables to make them accesable later in
+# Initializes variables to make them available later in
 # Program
 # ------------------------------------------------------------------------ #
 
@@ -35,6 +35,7 @@ class mon:
         self.mon_type2 = mon_type2
         self.stats = {'hp': hp_stat, 'atk': atk_stat, 'spd': spd_stat}
         self.mon_attack_list = mon_attack_list
+        mon_list.append(mon)
 
     def __repr__(self):
         return self.mon_attack_list
@@ -67,18 +68,19 @@ class create_attack:
 # ------------------------------------------------------------------------ #
 
 class battle:
-    def __init__(self, mon1, mon2, attack1, attack2, damage_done):
+    def __init__(self, mon1, mon2, attack1, attack2, damage_done, player1_mon_list):
         self.mon1 = mon1
         self.mon2 = mon2
         self.attack1 = attack1
         self.attack2 = attack2
         self.damage_done = damage_done
+        self.player1_mon_list = player1_mon_list
 
 
     def turn1(self, mon1, mon2, attack1, attack2):
         print("{}'s attacks are: \n".format(mon1.mon_name))
         for i in mon1.mon_attack_list:
-            print("Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
+            print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
 
 
         attack_chosen = False
@@ -123,7 +125,20 @@ class battle:
         else:
             battle.turn1(self, mon1, mon2, attack1, attack2)
 
-    # def attack_selection(self, mon1):
+    def mon_selection(self, player1_mon_list):
+        for mon in player1_mon_list:
+            print(mon.mon_name)
+
+        mon_chosen = False
+        while mon_chosen == False:
+            mon1 = input("Choose your pokemon!").title()
+            for i in player1_mon_list:
+                # for j in mon1.mon_attack_list.attack_name:
+                if mon1 == i.mon_name:
+                    mon1 = i
+                    mon_chosen = True
+                    print("{}, I choose you!".format(mon1.mon_name))
+                    return mon1
 
 
 # ------------------------------------------------------------------------ #
@@ -226,6 +241,9 @@ blas_attacks = [hydrocannon, hydropump, fireblast]
 Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
 Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
+player1_mon_list = [Charizard, Blastoise, Venusaur]
+
+
 
 # print(Blastoise.mon_type1)
 # print(attack_list)
@@ -245,6 +263,6 @@ Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 
 # for i in Venusaur.mon_attack_list:
 # print(i.attack_name)
-
+print(mon_list)
 if __name__ == "main":
     pass

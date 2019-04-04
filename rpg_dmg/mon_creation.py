@@ -25,3 +25,5 @@ from not_pokemon_func import battle, dmg_calc
 venblas = battle.turn1(battle, not_pokemon_func.Venusaur, not_pokemon_func.Blastoise, not_pokemon_func.ven_attacks, not_pokemon_func.blas_attacks)
 
 #battle.attack_selection(battle, not_pokemon_func.Blastoise)
+
+#mon = not_pokemon_func.battle.mon_selection(battle, not_pokemon_func.player1_mon_list)
