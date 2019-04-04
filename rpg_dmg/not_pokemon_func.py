@@ -74,20 +74,21 @@ class battle:
         self.attack2 = attack2
         self.damage_done = damage_done
 
-    # sets the base_damage to 2. Then checks if
-    # super_effective returns true
-    # if returns true damage_done is doubled
-    # else it is halved
 
     def turn1(self, mon1, mon2, attack1, attack2):
+        print("{}'s attacks are: \n".format(mon1.mon_name))
         for i in mon1.mon_attack_list:
-            print(mon1.mon_name + ' has ' + ' ' + i.attack_name)
+            print("Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
 
-        attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
-        for i in mon1.mon_attack_list:
-            # for j in mon1.mon_attack_list.attack_name:
-            if attack1 == i.attack_name:
-                attack1 = i
+
+        attack_chosen = False
+        while attack_chosen == False:
+            attack1 = input('Type the name of the attack for ' + mon1.mon_name + ' to use! ').title()
+            for i in mon1.mon_attack_list:
+                # for j in mon1.mon_attack_list.attack_name:
+                if attack1 == i.attack_name:
+                    attack1 = i
+                    attack_chosen = True
 
         attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
 
@@ -107,7 +108,7 @@ class battle:
                                                                                  mon2.hp_stat))
 
             if mon2.dead == True:
-                print('dead ' + mon2.mon_name)
+                print('{} has fainted!'.format(mon2.mon_name))
             else:
                 battle.turn2(self, mon1, mon2, attack1, attack2)
 
@@ -118,7 +119,7 @@ class battle:
                                                                              mon1.mon_name, dmg_calc.dmg_done,
                                                                              mon1.hp_stat))
         if mon1.dead == True:
-            print('dead ' + mon1.mon_name)
+            print('{} has fainted!'.format(mon1.mon_name))
         else:
             battle.turn1(self, mon1, mon2, attack1, attack2)
 
