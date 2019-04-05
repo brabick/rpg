@@ -7,6 +7,7 @@
 # ------------------------------------------------------------------------ #
 
 from random import randint
+import time
 
 # This is not pokemon
 # the only types so far
@@ -78,13 +79,13 @@ class battle:
 
     def turn1(self, mon1, mon2):
 
-        print("{}'s attacks are: \n".format(mon1.mon_name))
+        print("{}'s attacks are:".format(mon1.mon_name))
         for i in mon1.mon_attack_list:
             print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
 
         attack_chosen = False
         while attack_chosen == False:
-            attack1 = input('Type the name of the attack for ' + mon1.mon_name + ' to use! ').title()
+            attack1 = input('Type the name of the attack for ' + mon1.mon_name + ' to use! \n').title()
             for i in mon1.mon_attack_list:
                 # for j in mon1.mon_attack_list.attack_name:
                 if attack1 == i.attack_name:
@@ -96,9 +97,19 @@ class battle:
                     attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
 
                     is_dead(mon2)
-                    print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
-                                                                                         mon2.mon_name, dmg_calc.dmg_done,
-                                                                                         mon2.hp_stat))
+                    if super_effective(attack1, mon2) == 2:
+                        print('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
+                            mon1.mon_name, attack1.attack_name,
+                            mon2.mon_name, dmg_calc.dmg_done,
+                            mon2.hp_stat))
+                        time.sleep(.5)
+                    elif super_effective(attack1, mon2) == 1:
+                        print(
+                            '{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
+                                mon1.mon_name, attack1.attack_name,
+                                mon2.mon_name, dmg_calc.dmg_done,
+                                mon2.hp_stat))
+                        time.sleep(.5)
 
                     if mon2.dead == True:
                         print('{} has fainted!'.format(mon2.mon_name))
@@ -109,22 +120,35 @@ class battle:
 
         dmg_calc.dmg_done_calc(mon2, mon1, attack2)
         is_dead(mon1)
-        print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon2.mon_name, attack2.attack_name,
-                                                                             mon1.mon_name, dmg_calc.dmg_done,
-                                                                             mon1.hp_stat))
+        if super_effective(attack2, mon1) == 2:
+            print('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
+                mon1.mon_name, attack2.attack_name,
+                mon2.mon_name, dmg_calc.dmg_done,
+                mon2.hp_stat))
+            time.sleep(.5)
+        elif super_effective(attack2, mon1) == 1:
+            print(
+                '{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
+                    mon1.mon_name, attack2.attack_name,
+                    mon2.mon_name, dmg_calc.dmg_done,
+                    mon2.hp_stat))
+            time.sleep(.5)
+
         if mon1.dead == True:
             print('{} has fainted!'.format(mon1.mon_name))
         else:
+            print(end_of_turn[randint(0, len(end_of_turn) -1)])
             battle.turn1(self, mon1, mon2)
 
     def mon_selection(self, player1_mon_list):
+
         for mon in player1_mon_list:
             print(mon.mon_name)
 
         mon_chosen = False
 
         while mon_chosen == False:
-            mon1 = input("Choose your pokemon!").title()
+            mon1 = input("Choose your pokemon!\n").title()
             for i in player1_mon_list:
                 # for j in mon1.mon_attack_list.attack_name:
                 if mon1 == i.mon_name:
@@ -133,18 +157,18 @@ class battle:
                     print("{}, I choose you!".format(mon1.mon_name))
                     return mon1
 
-                    #battle.turn1(self, mon1, mon_list[randint(0, (len(mon_list) - 1))])
+                    # battle.turn1(self, mon1, mon_list[randint(0, (len(mon_list) - 1))])
 
 
 class start_battle:
     def new_battle(self, mon1, mon2, mon_list1):
-
         mon1 = battle.mon_selection(battle, mon_list1)
 
         mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
         print("Trainer Joey sent out {}!".format(mon2.mon_name))
-        #mon1 = battle.mon_selection.mon1
+        # mon1 = battle.mon_selection.mon1
         battle.turn1(battle, mon1, mon2)
+
 
 # ------------------------------------------------------------------------ #
 # spd_check will end up being used to determine which
@@ -170,12 +194,16 @@ class dmg_calc:
         self.dmg_done = dmg_done
 
     def dmg_done_calc(mon1, mon2, attack):
-        if super_effective(attack.attack_type, mon2.mon_type1) == True:
+        if super_effective(attack.attack_type, mon2.mon_type1) == 2:
             dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * 2
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat, dmg_calc.dmg_done
-        else:
+        elif super_effective(attack.attack_type, mon2.mon_type1) == 1:
             dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) / 2
+            mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
+            return mon2.hp_stat
+        else:
+            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power)
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
         # damage_formula = move_attack_power + super_effective * 1/2 mon_atk_stat
@@ -189,14 +217,29 @@ class dmg_calc:
 
 def super_effective(attack_type, mon_type):
     # used for damage calculation.  If true does double damage. If false does half (for now)
+    # 2 = super effective
+    # 1 = not very effective
+    # 0 = neutral
     if mon_type == 'fire' and attack_type == 'water':
-        return True
+        return 2
     elif mon_type == 'water' and attack_type == 'grass':
-        return True
+        return 2
     elif mon_type == 'grass' and attack_type == 'fire':
-        return True
+        return 2
+    elif mon_type == 'grass' and attack_type == 'grass':
+        return 1
+    elif mon_type == 'water' and attack_type == 'water':
+        return 1
+    elif mon_type == 'fire' and attack_type == 'fire':
+        return 1
+    elif mon_type == 'grass' and attack_type == 'water':
+        return 1
+    elif mon_type == 'water' and attack_type == 'fire':
+        return 1
+    elif mon_type == 'fire' and attack_type == 'grass':
+        return 1
     else:
-        return False
+        return 0
 
 
 def is_dead(mon):
@@ -213,6 +256,9 @@ def is_dead(mon):
 # Be the section where I use the functions to create Attacks and Pokemon
 # ------------------------------------------------------------------------ #
 
+end_of_turn = ["Your Pokemon is strong, keep it up!\n", "The enemy is getting weaker!\n", "Keep fighting!\n",
+               "The battle is heating up!\n"]
+
 # ------------------------------------------------------------------------ #
 # creates first attacks.
 # Format: func(attack name, attack type, attack power)
@@ -224,13 +270,14 @@ frenzyplant = create_attack('Frenzy Plant', 'grass', 25)
 fireblast = create_attack('Fire Blast', 'fire', 20)
 hydropump = create_attack('Hydro Pump', 'water', 20)
 solarbeam = create_attack('Solarbeam', 'grass', 20)
+hyperbeam = create_attack('Hyper Beam', 'normal', 30)
 
 # ------------------------------------------------------------------------ #
 # creates list of attacks for each mon.
 # ------------------------------------------------------------------------ #
 
 char_attacks = [blastburn, hydrocannon, frenzyplant]
-ven_attacks = [solarbeam, frenzyplant, hydropump]
+ven_attacks = [solarbeam, frenzyplant, hydropump, hyperbeam]
 blas_attacks = [hydrocannon, hydropump, fireblast]
 
 # ------------------------------------------------------------------------ #
@@ -246,6 +293,7 @@ Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 Charizard2 = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
 Blastoise2 = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur2 = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
+
 player1_mon_list = [Charizard, Blastoise, Venusaur]
 player2_mon_list = [Charizard2, Blastoise2, Venusaur2]
 # print(Blastoise.mon_type1)
