@@ -76,12 +76,11 @@ class battle:
         self.damage_done = damage_done
         self.player1_mon_list = player1_mon_list
 
+    def turn1(self, mon1, mon2):
 
-    def turn1(self, mon1, mon2, attack1, attack2):
         print("{}'s attacks are: \n".format(mon1.mon_name))
         for i in mon1.mon_attack_list:
             print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
-
 
         attack_chosen = False
         while attack_chosen == False:
@@ -92,29 +91,22 @@ class battle:
                     attack1 = i
                     attack_chosen = True
 
-        attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
+                    dmg_calc.dmg_done_calc(mon1, mon2, attack1)
 
-        try:
-            dmg_calc.dmg_done_calc(mon1, mon2, attack1)
-        except AttributeError:
-            print("Please enter an attack from the attack list.")
-            attack1 = input('Enter the attack for ' + mon1.mon_name + ' to use! ').title()
-            for i in mon1.mon_attack_list:
-                # for j in mon1.mon_attack_list.attack_name:
-                if attack1 == i.attack_name:
-                    attack1 = i
-        finally:
-            is_dead(mon2)
-            print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
-                                                                                 mon2.mon_name, dmg_calc.dmg_done,
-                                                                                 mon2.hp_stat))
+                    attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
 
-            if mon2.dead == True:
-                print('{} has fainted!'.format(mon2.mon_name))
-            else:
-                battle.turn2(self, mon1, mon2, attack1, attack2)
+                    is_dead(mon2)
+                    print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon1.mon_name, attack1.attack_name,
+                                                                                         mon2.mon_name, dmg_calc.dmg_done,
+                                                                                         mon2.hp_stat))
 
-    def turn2(self, mon1, mon2, attack1, attack2):
+                    if mon2.dead == True:
+                        print('{} has fainted!'.format(mon2.mon_name))
+                    else:
+                        battle.turn2(self, mon1, mon2, attack2)
+
+    def turn2(self, mon1, mon2, attack2):
+
         dmg_calc.dmg_done_calc(mon2, mon1, attack2)
         is_dead(mon1)
         print('{} used {}. {} took {} damage and has {} hp remaining'.format(mon2.mon_name, attack2.attack_name,
@@ -123,13 +115,14 @@ class battle:
         if mon1.dead == True:
             print('{} has fainted!'.format(mon1.mon_name))
         else:
-            battle.turn1(self, mon1, mon2, attack1, attack2)
+            battle.turn1(self, mon1, mon2)
 
     def mon_selection(self, player1_mon_list):
         for mon in player1_mon_list:
             print(mon.mon_name)
 
         mon_chosen = False
+
         while mon_chosen == False:
             mon1 = input("Choose your pokemon!").title()
             for i in player1_mon_list:
@@ -140,6 +133,18 @@ class battle:
                     print("{}, I choose you!".format(mon1.mon_name))
                     return mon1
 
+                    #battle.turn1(self, mon1, mon_list[randint(0, (len(mon_list) - 1))])
+
+
+class start_battle:
+    def new_battle(self, mon1, mon2, mon_list1):
+
+        mon1 = battle.mon_selection(battle, mon_list1)
+
+        mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
+        print("Trainer Joey sent out {}!".format(mon2.mon_name))
+        #mon1 = battle.mon_selection.mon1
+        battle.turn1(battle, mon1, mon2)
 
 # ------------------------------------------------------------------------ #
 # spd_check will end up being used to determine which
@@ -185,16 +190,12 @@ class dmg_calc:
 def super_effective(attack_type, mon_type):
     # used for damage calculation.  If true does double damage. If false does half (for now)
     if mon_type == 'fire' and attack_type == 'water':
-        print('Stopping at fire')
         return True
     elif mon_type == 'water' and attack_type == 'grass':
-        print('Stopping at water')
         return True
     elif mon_type == 'grass' and attack_type == 'fire':
-        print('Stopping at grass')
         return True
     else:
-        print('Stopping at false')
         return False
 
 
@@ -219,7 +220,7 @@ def is_dead(mon):
 
 blastburn = create_attack('Blast Burn', 'fire', 25)
 hydrocannon = create_attack('Hydro Cannon', 'water', 25)
-grassattack = create_attack('Frenzy Plant', 'grass', 25)
+frenzyplant = create_attack('Frenzy Plant', 'grass', 25)
 fireblast = create_attack('Fire Blast', 'fire', 20)
 hydropump = create_attack('Hydro Pump', 'water', 20)
 solarbeam = create_attack('Solarbeam', 'grass', 20)
@@ -228,8 +229,8 @@ solarbeam = create_attack('Solarbeam', 'grass', 20)
 # creates list of attacks for each mon.
 # ------------------------------------------------------------------------ #
 
-char_attacks = [blastburn, hydrocannon, grassattack]
-ven_attacks = [solarbeam, grassattack, hydropump]
+char_attacks = [blastburn, hydrocannon, frenzyplant]
+ven_attacks = [solarbeam, frenzyplant, hydropump]
 blas_attacks = [hydrocannon, hydropump, fireblast]
 
 # ------------------------------------------------------------------------ #
@@ -242,14 +243,11 @@ Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
 Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 player1_mon_list = [Charizard, Blastoise, Venusaur]
-
-
-
+player2_mon_list = [Charizard, Blastoise, Venusaur]
 # print(Blastoise.mon_type1)
 # print(attack_list)
 # print(grass_attack[1])
 # print(Venusaur.stats)
-
 
 # first battle
 # venblas = battle.turn1(battle, Venusaur, mon_creation.Blastoise, mon_creation.ven_attacks, mon_creation.blastoise_attacks)
@@ -263,6 +261,6 @@ player1_mon_list = [Charizard, Blastoise, Venusaur]
 
 # for i in Venusaur.mon_attack_list:
 # print(i.attack_name)
-print(mon_list)
+
 if __name__ == "main":
     pass
