@@ -242,8 +242,12 @@ blas_attacks = [hydrocannon, hydropump, fireblast]
 Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
 Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
+
+Charizard2 = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
+Blastoise2 = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
+Venusaur2 = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 player1_mon_list = [Charizard, Blastoise, Venusaur]
-player2_mon_list = [Charizard, Blastoise, Venusaur]
+player2_mon_list = [Charizard2, Blastoise2, Venusaur2]
 # print(Blastoise.mon_type1)
 # print(attack_list)
 # print(grass_attack[1])
