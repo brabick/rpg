@@ -117,7 +117,10 @@ class battle:
             player1_mon_list.remove(mon1)
             if len(player1_mon_list) > 0:
                 mon1 = battle.mon_selection(battle, player1_mon_list)
-                battle.turn1(self, mon1, mon2)
+                attack2 = fainted
+                battle.turn2(self, mon2, mon1, fainted)
+
+
             else:
                 print("All of your pokemon have fainted! Better luck next time!")
 
@@ -151,6 +154,8 @@ class battle:
                 mon.mon_name, attack.attack_name,
                 mon.mon_name, dmg_calc.dmg_done,
                 mon.hp_stat))
+            if attack == fainted:
+                battle_txt = "Nothing here"
             print(battle_txt)
             time.sleep(.5)
         elif super_effective(attack_type, mon_type) == False:
@@ -171,7 +176,7 @@ class battle:
 
 
 class start_battle:
-    def new_battle(self, mon1, mon2, mon_list1):
+    def new_battle(self, mon_list1):
         mon1 = battle.mon_selection(battle, mon_list1)
 
         mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
@@ -214,6 +219,8 @@ class dmg_calc:
             dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) / 2
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
+        elif attack == fainted:
+            dmg_calc.dmg_done = 0
         else:
             dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power)
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
@@ -288,18 +295,18 @@ blas_attacks = [hydrocannon, hydropump, fireblast]
 # attack, speed, attack list)
 # ------------------------------------------------------------------------ #
 
-Charizard = mon('Charizard', 'fire', None, 10, 10, 10, char_attacks)
-Blastoise = mon('Blastoise', 'water', None, 10, 10, 9, blas_attacks)
-Venusaur = mon('Venusaur', 'grass', None, 10, 10, 10, ven_attacks)
 
+player1_mon_list = [
+    mon('Charizard', 'fire', None, 80, 10, 10, char_attacks),
+    mon('Blastoise', 'water', None, 10, 10, 9, blas_attacks),
+    mon('Venusaur', 'grass', None, 10, 10, 10, ven_attacks)
+]
 
-Charizard2 = mon('Charizard', 'fire', None, 60, 10, 10, char_attacks)
-Blastoise2 = mon('Blastoise', 'water', None, 60, 10, 9, blas_attacks)
-Venusaur2 = mon('Venusaur', 'grass', None, 60, 10, 10, ven_attacks)
-
-
-player1_mon_list = [Charizard, Blastoise, Venusaur]
-player2_mon_list = [Charizard2, Blastoise2, Venusaur2]
+player2_mon_list = [
+    mon('Charizard', 'fire', None, 50, 10, 10, char_attacks),
+    mon('Blastoise', 'water', None, 50, 10, 9, blas_attacks),
+    mon('Venusaur', 'grass', None, 50, 10, 10, ven_attacks)
+]
 
 
 if __name__ == "main":
