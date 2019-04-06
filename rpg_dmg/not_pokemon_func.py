@@ -145,24 +145,26 @@ class battle:
         attack_type = attack.attack_type
         mon_type = mon.mon_type1
         if super_effective(attack_type, mon_type) == True:
-            print('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
+            battle_txt = ('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
                 mon.mon_name, attack.attack_name,
                 mon.mon_name, dmg_calc.dmg_done,
                 mon.hp_stat))
+            print(battle_txt)
             time.sleep(.5)
         elif super_effective(attack_type, mon_type) == False:
             print(attack.attack_type)
-            print('{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
+            battle_txt = ('{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
                 mon.mon_name, attack.attack_name,
                 mon.mon_name, dmg_calc.dmg_done,
                 mon.hp_stat))
+            print(battle_txt)
             time.sleep(.5)
         elif super_effective(attack_type, mon_type) == None:
-            print(attack.attack_type)
-            print('{} used {}, {} took {} damage and has {} hp remaining'.format(
+            battle_txt = ('{} used {}, {} took {} damage and has {} hp remaining'.format(
                 mon.mon_name, attack.attack_name,
                 mon.mon_name, dmg_calc.dmg_done,
                 mon.hp_stat))
+            print(battle_txt)
             time.sleep(.5)
 
 
@@ -289,9 +291,9 @@ Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
 Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
 
 
-Charizard2 = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
-Blastoise2 = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
-Venusaur2 = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
+Charizard2 = mon('Charizard', 'fire', None, 60, 10, 10, char_attacks)
+Blastoise2 = mon('Blastoise', 'water', None, 60, 10, 9, blas_attacks)
+Venusaur2 = mon('Venusaur', 'grass', None, 60, 10, 10, ven_attacks)
 
 
 player1_mon_list = [Charizard, Blastoise, Venusaur]
