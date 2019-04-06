@@ -9,6 +9,7 @@
 from random import randint
 import time
 
+
 # This is not pokemon
 # the only types so far
 type_list = ['fire', 'water', 'grass']
@@ -81,7 +82,6 @@ class battle:
         while attack_chosen == False:
             attack1 = input('Type the name of the attack for ' + mon1.mon_name + ' to use! \n').title()
             for i in mon1.mon_attack_list:
-                # for j in mon1.mon_attack_list.attack_name:
                 if attack1 == i.attack_name:
                     attack1 = i
                     attack_chosen = True
@@ -92,7 +92,15 @@ class battle:
                     battle.print_turn_dmg(battle, attack1, mon2)
 
                     if mon2.dead == True:
+                        player2_mon_list.remove(mon2)
                         print('{} has fainted!'.format(mon2.mon_name))
+
+                        if len(player2_mon_list) > 0:
+                            mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
+                            print("Trainer Joey sent out {}".format(mon2.mon_name))
+                            battle.turn2(self, mon1, mon2, attack2)
+                        else:
+                            print("You win!")
                     else:
                         battle.turn2(self, mon1, mon2, attack2)
 
@@ -104,6 +112,13 @@ class battle:
 
         if mon1.dead == True:
             print('{} has fainted!'.format(mon1.mon_name))
+            player1_mon_list.remove(mon1)
+            if len(player1_mon_list) > 0:
+                mon1 = battle.mon_selection(battle, player1_mon_list)
+                battle.turn1(self, mon1, mon2)
+            else:
+                print("All of your pokemon have fainted! Better luck next time!")
+
         else:
             print(end_of_turn[randint(0, len(end_of_turn) -1)])
             battle.turn1(self, mon1, mon2)
@@ -129,9 +144,7 @@ class battle:
     def print_turn_dmg(self, attack, mon):
         attack_type = attack.attack_type
         mon_type = mon.mon_type1
-        print(attack_type)
         if super_effective(attack_type, mon_type) == True:
-            print(attack.attack_type)
             print('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
                 mon.mon_name, attack.attack_name,
                 mon.mon_name, dmg_calc.dmg_done,
@@ -233,6 +246,7 @@ def is_dead(mon):
     if mon.hp_stat <= 0:
         mon.dead = True
         mon.hp_stat = 0
+
 
 
 # ------------------------------------------------------------------------ #
