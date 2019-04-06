@@ -96,15 +96,17 @@ class battle:
                         print('{} has fainted!'.format(mon2.mon_name))
 
                         if len(player2_mon_list) > 0:
+                            #battle.print_turn_dmg.battle_txt = "{} has fainted!".format(mon2)
                             mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
                             print("Trainer Joey sent out {}".format(mon2.mon_name))
-                            battle.turn2(self, mon1, mon2, attack2)
+                            battle.turn1(self, mon1, mon2)
+
                         else:
                             print("You win!")
                     else:
-                        battle.turn2(self, mon1, mon2, attack2)
+                        battle.turn2(self, mon2, mon1, attack2)
 
-    def turn2(self, mon1, mon2, attack2):
+    def turn2(self, mon2, mon1, attack2):
 
         dmg_calc.dmg_done_calc(mon2, mon1, attack2)
         is_dead(mon1)
@@ -120,7 +122,7 @@ class battle:
                 print("All of your pokemon have fainted! Better luck next time!")
 
         else:
-            print(end_of_turn[randint(0, len(end_of_turn) -1)])
+            print(end_of_turn[randint(0, len(end_of_turn) - 1)])
             battle.turn1(self, mon1, mon2)
 
     def mon_selection(self, player1_mon_list):
@@ -271,7 +273,7 @@ fireblast = create_attack('Fire Blast', 'fire', 20)
 hydropump = create_attack('Hydro Pump', 'water', 20)
 solarbeam = create_attack('Solarbeam', 'grass', 20)
 hyperbeam = create_attack('Hyper Beam', 'normal', 30)
-
+fainted = create_attack('fainted', None, 0)
 # ------------------------------------------------------------------------ #
 # creates list of attacks for each mon.
 # ------------------------------------------------------------------------ #
@@ -286,9 +288,9 @@ blas_attacks = [hydrocannon, hydropump, fireblast]
 # attack, speed, attack list)
 # ------------------------------------------------------------------------ #
 
-Charizard = mon('Charizard', 'fire', None, 150, 10, 10, char_attacks)
-Blastoise = mon('Blastoise', 'water', None, 150, 10, 9, blas_attacks)
-Venusaur = mon('Venusaur', 'grass', None, 150, 10, 10, ven_attacks)
+Charizard = mon('Charizard', 'fire', None, 10, 10, 10, char_attacks)
+Blastoise = mon('Blastoise', 'water', None, 10, 10, 9, blas_attacks)
+Venusaur = mon('Venusaur', 'grass', None, 10, 10, 10, ven_attacks)
 
 
 Charizard2 = mon('Charizard', 'fire', None, 60, 10, 10, char_attacks)
@@ -298,23 +300,7 @@ Venusaur2 = mon('Venusaur', 'grass', None, 60, 10, 10, ven_attacks)
 
 player1_mon_list = [Charizard, Blastoise, Venusaur]
 player2_mon_list = [Charizard2, Blastoise2, Venusaur2]
-# print(Blastoise.mon_type1)
-# print(attack_list)
-# print(grass_attack[1])
-# print(Venusaur.stats)
 
-# first battle
-# venblas = battle.turn1(battle, Venusaur, mon_creation.Blastoise, mon_creation.ven_attacks, mon_creation.blastoise_attacks)
-
-# venblas2 = battle.turn2(battle, Venusaur, Blastoise, grass_attack, water_attack)
-# print(venblas)
-
-# print(dmg_calc.dmg_done_calc(Venusaur, Blastoise, grass_attack))
-
-# print(Venusaur.mon_attack_list)
-
-# for i in Venusaur.mon_attack_list:
-# print(i.attack_name)
 
 if __name__ == "main":
     pass
