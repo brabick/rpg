@@ -1,0 +1,63 @@
+Next steps for program (in no order):
+
+#Add the ability to choose pokemon for both sides.
+-->You can choose your mon, the opposing mon is chosen at random
+
+Expand type chart and super effective calc
+
+Add effects and more variability in attacks * This is going to be difficult
+
+Add more pokemon
+
+Build an interface (long term project)
+
+#Figure out how to make it so that a mirror match has two different sets of hp(!important!)
+-->I created another instance of each pokemon with two different lists.  This fixes this issue.
+
+#Make information more accessable (wait statements?) Print turn over?
+-->Prints a random statement at the end of each turn that helps to break up the battle
+
+#Print when an attack is super effective!
+-->Added
+
+#Make the battle flow and have the next pokemon sent out when one faints.
+-->After one of your pokemon faints, it is removed from the list and you are asked to enter the name of you next pokemon.
+  This goes until the list is empty.  With the opponent, after their pokemon faints they send out another random pokemon
+  from the list.  This works but the turn doesn't stop if a pokemon faints.  The incoming pokemon then uses the attack
+  that is then performed by that pokemon.
+
+Create attack called faint that is perfomed when a pokemon faints. This will override the attack text.
+
+Reorganize main game turns such as:
+    while (game not over):
+        turn1()
+        if (game is over):
+            break
+        turn2()
+
+    if (you won):
+        print("You won!")
+    else:
+        print("You suck!")
+
+
+New battle notes
+When I knock out the opposing mon first:
+I send char, they send char
+hydro cannon
+opp char faints, blas comes out
+frenzy plant
+opp blas faints, ven comes out
+blast burn
+ven faints win
+Working as intended
+
+When opp knocks me out first
+i send char, they send ven
+hydro cannon
+char faints I choose blastoise
+blas comes out
+i choose hydro cannon
+Venusaur uses hydro cannon?
+Blastoise uses hyper beam? (doesnt have hyper beam)
+Mons are switched
