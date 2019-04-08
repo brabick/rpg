@@ -8,6 +8,7 @@
 
 from random import randint
 import time
+import mon_creation
 
 
 # This is not pokemon
@@ -112,11 +113,11 @@ class battle:
                     # If not, you win will print and the battle will end
                     # ------------------------------------------------------------------------ #
                     if mon2.dead == True:
-                        player2_mon_list.remove(mon2)
+                        mon_creation.player2_mon_list.remove(mon2)
                         print('{} has fainted!'.format(mon2.mon_name))
-                        if len(player2_mon_list) > 0:
+                        if len(mon_creation.player2_mon_list) > 0:
                             #battle.print_turn_dmg.battle_txt = "{} has fainted!".format(mon2)
-                            mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
+                            mon2 = mon_creation.player2_mon_list[randint(0, len(mon_creation.player2_mon_list) - 1)]
                             print("Trainer Joey sent out {}".format(mon2.mon_name))
                             battle.turn1(self, mon1, mon2)
 
@@ -138,13 +139,13 @@ class battle:
 
         if mon1.dead == True:
             print('{} has fainted!'.format(mon1.mon_name))
-            player1_mon_list.remove(mon1)
-            if len(player1_mon_list) > 0:
-                mon1 = battle.mon_selection(battle, player1_mon_list)
-                attack2 = fainted
-                if attack2 == fainted:
+            mon_creation.player1_mon_list.remove(mon1)
+            if len(mon_creation.player1_mon_list) > 0:
+                mon1 = battle.mon_selection(battle, mon_creation.player1_mon_list)
+                attack2 = mon_creation.fainted
+                if attack2 == mon_creation.fainted:
                     battle.battle_txt = "Nothing here"
-                    battle.turn2(self, mon2, mon1, fainted)
+                    battle.turn2(self, mon2, mon1, mon_creation.fainted)
 
 
             else:
@@ -183,14 +184,14 @@ class battle:
     def print_turn_dmg(self, attack, mon):
         attack_type = attack.attack_type
         mon_type = mon.mon_type1
-        if attack == fainted:
+        if attack == mon_creation.fainted:
             print(" ")
         elif super_effective(attack_type, mon_type) == True:
             battle_txt = ('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
                 mon.mon_name, attack.attack_name,
                 mon.mon_name, dmg_calc.dmg_done,
                 mon.hp_stat))
-            if attack == fainted:
+            if attack == mon_creation.fainted:
                 battle_txt = "Nothing here"
             print(battle_txt)
             time.sleep(.5)
@@ -217,7 +218,7 @@ class battle:
 class start_battle:
     def new_battle(self, mon_list1):
         mon1 = battle.mon_selection(battle, mon_list1)
-        mon2 = player2_mon_list[randint(0, len(player2_mon_list) - 1)]
+        mon2 = mon_creation.player2_mon_list[randint(0, len(mon_creation.player2_mon_list) - 1)]
         print("Trainer Joey sent out {}!".format(mon2.mon_name))
         time.sleep(.6)
         # mon1 = battle.mon_selection.mon1
@@ -248,7 +249,7 @@ class dmg_calc:
         self.dmg_done = dmg_done
 
     def dmg_done_calc(mon1, mon2, attack):
-        if attack == fainted:
+        if attack == mon_creation.fainted:
             dmg_calc.dmg_done = 0
         elif super_effective(attack.attack_type, mon2.mon_type1) == True:
             dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * 2
@@ -303,51 +304,13 @@ def is_dead(mon):
 # Be the section where I use the functions to create Attacks and Pokemon
 # ------------------------------------------------------------------------ #
 
+# ------------------------------------------------------------------------ #
+# The list of phrases that are printed at the end of each turn
+# Helps to break up the turns
+# ------------------------------------------------------------------------ #
+
 end_of_turn = ["Your Pokemon is strong, keep it up!\n", "The enemy is getting weaker!\n", "Keep fighting!\n",
                "The battle is heating up!\n"]
-
-# ------------------------------------------------------------------------ #
-# creates first attacks.
-# Format: func(attack name, attack type, attack power)
-# ------------------------------------------------------------------------ #
-
-blastburn = create_attack('Blast Burn', 'fire', 25)
-hydrocannon = create_attack('Hydro Cannon', 'water', 25)
-frenzyplant = create_attack('Frenzy Plant', 'grass', 25)
-fireblast = create_attack('Fire Blast', 'fire', 20)
-hydropump = create_attack('Hydro Pump', 'water', 20)
-solarbeam = create_attack('Solarbeam', 'grass', 20)
-hyperbeam = create_attack('Hyper Beam', 'normal', 30)
-fainted = create_attack('fainted', None, 0)
-# ------------------------------------------------------------------------ #
-# creates list of attacks for each mon.
-# ------------------------------------------------------------------------ #
-
-char_attacks = [blastburn, hydrocannon, frenzyplant]
-ven_attacks = [solarbeam, frenzyplant, hydropump, hyperbeam]
-blas_attacks = [hydrocannon, hydropump, fireblast]
-
-# ------------------------------------------------------------------------ #
-# creates pokemon.
-# Format: func(Mon name, mon type1, mon type 2, hp,
-# attack, speed, attack list)
-# ------------------------------------------------------------------------ #
-
-# ------------------------------------------------------------------------ #
-# Creates the player mon lists
-# ------------------------------------------------------------------------ #
-
-player1_mon_list = [
-    mon('Charizard', 'fire', None, 80, 10, 10, char_attacks),
-    mon('Blastoise', 'water', None, 10, 10, 9, blas_attacks),
-    mon('Venusaur', 'grass', None, 10, 10, 10, ven_attacks)
-]
-
-player2_mon_list = [
-    mon('Charizard', 'fire', None, 50, 10, 10, char_attacks),
-    mon('Blastoise', 'water', None, 50, 10, 9, blas_attacks),
-    mon('Venusaur', 'grass', None, 50, 10, 10, ven_attacks)
-]
 
 
 if __name__ == "main":

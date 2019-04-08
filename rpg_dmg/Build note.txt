@@ -15,7 +15,8 @@ Expand type chart and super effective calc. Must include all types and and immun
     based on effectiveness
 }
 
-Move mon, attack and player lists all to another file that is read and updated separately
+#Move mon, attack and player lists all to another file that is read and updated separately
+-->Moved and updated function file to reflect change in location.
 
 Add effects and more variability in attacks * This is going to be difficult
 

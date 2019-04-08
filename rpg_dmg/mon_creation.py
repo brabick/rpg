@@ -1,14 +1,44 @@
-import not_pokemon_func
-from not_pokemon_func import battle, dmg_calc, start_battle, mon_list
+from not_pokemon_func import create_attack, mon
 
+# ------------------------------------------------------------------------ #
+# creates first attacks.
+# Format: func(attack name, attack type, attack power)
+# ------------------------------------------------------------------------ #
 
-new_battle = start_battle.new_battle(start_battle, not_pokemon_func.player1_mon_list)
+blastburn = create_attack('Blast Burn', 'fire', 25)
+hydrocannon = create_attack('Hydro Cannon', 'water', 25)
+frenzyplant = create_attack('Frenzy Plant', 'grass', 25)
+fireblast = create_attack('Fire Blast', 'fire', 20)
+hydropump = create_attack('Hydro Pump', 'water', 20)
+solarbeam = create_attack('Solarbeam', 'grass', 20)
+hyperbeam = create_attack('Hyper Beam', 'normal', 30)
+fainted = create_attack('fainted', None, 0)
+# ------------------------------------------------------------------------ #
+# creates list of attacks for each mon.
+# ------------------------------------------------------------------------ #
 
+char_attacks = [blastburn, hydrocannon, frenzyplant]
+ven_attacks = [solarbeam, frenzyplant, hydropump, hyperbeam]
+blas_attacks = [hydrocannon, hydropump, fireblast]
 
-#venblas = battle.turn1(battle, not_pokemon_func.Venusaur, not_pokemon_func.Blastoise)
+# ------------------------------------------------------------------------ #
+# creates pokemon.
+# Format: func(Mon name, mon type1, mon type 2, hp,
+# attack, speed, attack list)
+# ------------------------------------------------------------------------ #
 
-#battle.attack_selection(battle, not_pokemon_func.Blastoise)
+# ------------------------------------------------------------------------ #
+# Creates the player mon lists
+# ------------------------------------------------------------------------ #
 
-#mon = not_pokemon_func.battle.mon_selection(battle, not_pokemon_func.player1_mon_list)
+player1_mon_list = [
+    mon('Charizard', 'fire', None, 80, 10, 10, char_attacks),
+    mon('Blastoise', 'water', None, 10, 10, 9, blas_attacks),
+    mon('Venusaur', 'grass', None, 10, 10, 10, ven_attacks)
+]
 
-#new_battle = battle.mon_selection(battle, not_pokemon_func.player1_mon_list)
+player2_mon_list = [
+    mon('Charizard', 'fire', None, 50, 10, 10, char_attacks),
+    mon('Blastoise', 'water', None, 50, 10, 9, blas_attacks),
+    mon('Venusaur', 'grass', None, 50, 10, 10, ven_attacks)
+]
