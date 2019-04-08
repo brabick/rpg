@@ -1,13 +1,33 @@
+Key:
+# means task is done
+{} elaborates thoughts about the current task
+--> detailing how the task was completed
+
+
 Next steps for program (in no order):
 
 #Add the ability to choose pokemon for both sides.
 -->You can choose your mon, the opposing mon is chosen at random
 
-Expand type chart and super effective calc
+Expand type chart and super effective calc. Must include all types and and immunities.
+{
+    I'm thinking we can just assign the multiplier in damage calc a value of 0, .25, .5, 1, 2 or 4
+    based on effectiveness
+}
+
+Move mon, attack and player lists all to another file that is read and updated separately
 
 Add effects and more variability in attacks * This is going to be difficult
 
 Add more pokemon
+{
+    Has to be done after type chart has been updated
+}
+
+Being able to switch mons in the middle of a battle
+{
+    Seems longer term as well, might require a database. And another custom attack like fainted
+}
 
 Build an interface (long term project)
 
@@ -26,7 +46,9 @@ Build an interface (long term project)
   from the list.  This works but the turn doesn't stop if a pokemon faints.  The incoming pokemon then uses the attack
   that is then performed by that pokemon.
 
-Create attack called faint that is perfomed when a pokemon faints. This will override the attack text.
+#Create attack called faint that is perfomed when a pokemon faints. This will override the attack text.
+--> Works well. Adjusted if statement for damage calc and print battle dmg so that a specific line is
+--> printed and no damage is done
 
 Reorganize main game turns such as:
     while (game not over):
@@ -41,23 +63,3 @@ Reorganize main game turns such as:
         print("You suck!")
 
 
-New battle notes
-When I knock out the opposing mon first:
-I send char, they send char
-hydro cannon
-opp char faints, blas comes out
-frenzy plant
-opp blas faints, ven comes out
-blast burn
-ven faints win
-Working as intended
-
-When opp knocks me out first
-i send char, they send ven
-hydro cannon
-char faints I choose blastoise
-blas comes out
-i choose hydro cannon
-Venusaur uses hydro cannon?
-Blastoise uses hyper beam? (doesnt have hyper beam)
-Mons are switched
