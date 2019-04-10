@@ -274,10 +274,12 @@ class dmg_calc:
 
 
 def super_effective(attack_type, mon_type):
+    # ------------------------------------------------------------------------ #
     # used for damage calculation.  If true does double damage. If false does half (for now)
     # 2 = super effective
     # 1 = not very effective
     # 0 = neutral
+    # ------------------------------------------------------------------------ #
     if mon_type == 'fire' and attack_type == 'water':
         return True
     elif mon_type == 'water' and attack_type == 'grass':
@@ -288,16 +290,15 @@ def super_effective(attack_type, mon_type):
         return False
 
 
-
 def is_dead(mon):
+    # ------------------------------------------------------------------------ #
     # checks if mon.hp_stat <= 0.  If so dead = true, prints message
     # and sets hp to 0 to prevent printing hp < 0
+    # ------------------------------------------------------------------------ #
 
     if mon.hp_stat <= 0:
         mon.dead = True
         mon.hp_stat = 0
-
-
 
 # ------------------------------------------------------------------------ #
 # The large section above is all about creating the functions.  Below will

@@ -42,3 +42,6 @@ player2_mon_list = [
     mon('Blastoise', 'water', None, 50, 10, 9, blas_attacks),
     mon('Venusaur', 'grass', None, 50, 10, 10, ven_attacks)
 ]
+
+if __name__ == "main":
+    pass
