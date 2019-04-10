@@ -252,7 +252,7 @@ class dmg_calc:
         if attack == mon_creation.fainted:
             dmg_calc.dmg_done = 0
         elif super_effective(attack.attack_type, mon2.mon_type1) == True:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * 2
+            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * multiplier
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
         elif super_effective(attack.attack_type, mon2.mon_type1) == False:
@@ -274,6 +274,7 @@ class dmg_calc:
 
 
 def super_effective(attack_type, mon_type):
+    global multiplier
     # ------------------------------------------------------------------------ #
     # used for damage calculation.  If true does double damage. If false does half (for now)
     # 2 = super effective
@@ -281,10 +282,13 @@ def super_effective(attack_type, mon_type):
     # 0 = neutral
     # ------------------------------------------------------------------------ #
     if mon_type == 'fire' and attack_type == 'water':
+        multiplier = 6
         return True
     elif mon_type == 'water' and attack_type == 'grass':
+        multiplier = 6
         return True
     elif mon_type == 'grass' and attack_type == 'fire':
+        multiplier = 6
         return True
     else:
         return False
