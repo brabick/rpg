@@ -403,9 +403,12 @@ def effective(attack_type, mon_type):
     for i in mon_type_list:
         if i == mon_type:
             i = mon_type
-            print(i)
         for j in attack_type_list:
             if j == attack_type:
                 j = attack_type
                 multiplier = j[i]
                 return multiplier
+
+
+if __name__ == "main":
+    pass

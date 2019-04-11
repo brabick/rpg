@@ -73,14 +73,13 @@ class player:
 
 class mon:
     # default dead = false
-    def __init__(self, mon_name, mon_type1, mon_type_string, hp_stat, atk_stat, spd_stat, mon_attack_list, dead=False):
+    def __init__(self, mon_name, mon_type1, hp_stat, atk_stat, spd_stat, mon_attack_list, dead=False):
         self.dead = dead
         self.mon_name = mon_name
         self.hp_stat = hp_stat
         self.atk_stat = atk_stat
         self.spd_stat = spd_stat
         self.mon_type1 = mon_type1
-        self.mon_type_string = mon_type_string
         self.stats = {'hp': hp_stat, 'atk': atk_stat, 'spd': spd_stat}
         self.mon_attack_list = mon_attack_list
         mon_list.append(mon)
@@ -189,7 +188,7 @@ class battle:
         mon_type = mon1.mon_type1
         if attack == mon_creation.fainted:
             print(" ")
-        elif se.effective(attack.attack_type, mon2.mon_type_string) >= 2:
+        elif se.effective(attack.attack_type, mon2.mon_type1) >= 2:
             battle_txt = ('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
@@ -198,14 +197,14 @@ class battle:
                 battle_txt = "Nothing here"
             print(battle_txt)
             time.sleep(.5)
-        elif se.effective(attack.attack_type, mon2.mon_type_string) < 1:
+        elif se.effective(attack.attack_type, mon2.mon_type1) < 1:
             battle_txt = ('{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
                 mon2.hp_stat))
             print(battle_txt)
             time.sleep(.5)
-        elif se.effective(attack.attack_type, mon2.mon_type_string) == 1:
+        elif se.effective(attack.attack_type, mon2.mon_type1) == 1:
             battle_txt = ('{} used {}, {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
@@ -271,7 +270,7 @@ class dmg_calc:
         if attack == mon_creation.fainted:
             dmg_calc.dmg_done = 0
         else:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * se.effective(attack.attack_type, mon2.mon_type_string)
+            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * se.effective(attack.attack_type, mon2.mon_type1)
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
 

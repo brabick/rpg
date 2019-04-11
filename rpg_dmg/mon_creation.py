@@ -41,16 +41,16 @@ test_list = [stoneedge, earthquake, icebeam, frenzyplant]
 # ------------------------------------------------------------------------ #
 
 player1_mon_list = [
-    mon('Charizard', fire, 'fire', 80, 10, 10, char_attacks),
-    mon('Blastoise', water, 'water', 10, 10, 9, blas_attacks),
-    mon('Venusaur', grass, 'grass', 10, 10, 10, ven_attacks),
-    mon('Test', ground, 'ground', 100, 10, 6, test_list)
+    mon('Charizard', 'fire', 80, 10, 10, char_attacks),
+    mon('Blastoise', 'water', 10, 10, 9, blas_attacks),
+    mon('Venusaur', 'grass', 10, 10, 10, ven_attacks),
+    mon('Test', 'ground', 100, 10, 6, test_list)
 ]
 
 player2_mon_list = [
-    mon('Trainer Joey\'s Charizard', fire, 'fire', 50, 10, 10, char_attacks),
-    mon('Trainer Joey\'s Blastoise', water, 'water', 50, 10, 9, blas_attacks),
-    mon('Trainer Joey\'s Venusaur', grass, 'grass', 50, 10, 10, ven_attacks)
+    mon('Trainer Joey\'s Charizard', 'fire', 50, 10, 10, char_attacks),
+    mon('Trainer Joey\'s Blastoise', 'water', 50, 10, 9, blas_attacks),
+    mon('Trainer Joey\'s Venusaur', 'grass', 50, 10, 10, ven_attacks)
 ]
 
 if __name__ == "main":

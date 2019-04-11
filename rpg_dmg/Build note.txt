@@ -18,6 +18,7 @@ Next steps for program (in no order):
 -->multiply the multipliers
 
 Expand type chart to be able to take in two types
+-->The first part of this is done. I have one for loop that I can go through twice, once for each type.
 
 #Move mon, attack and player lists all to another file that is read and updated separately
 -->Moved and updated function file to reflect change in location.
@@ -55,7 +56,7 @@ Build an interface (long term project)
 --> Works well. Adjusted if statement for damage calc and print battle dmg so that a specific line is
 --> printed and no damage is done
 
-Reorganize main game turns such as:
+#Reorganize main game turns such as:
     while (game not over):
         turn1()
         if (game is over):
@@ -66,5 +67,6 @@ Reorganize main game turns such as:
         print("You won!")
     else:
         print("You suck!")
+-->Abe completed this
 
-
+Implement STAB and critical hits
