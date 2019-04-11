@@ -1,8 +1,11 @@
 import mon_creation
-from not_pokemon_func import start_battle
+from not_pokemon_func import battle, player
 
+Player1 = player('You', 'human', mon_creation.player1_mon_list)
+Player2 = player('Joey', 'cpu', mon_creation.player2_mon_list)
 
-start_battle.new_battle(start_battle, mon_creation.player1_mon_list)
+TheBattle = battle(Player1, Player2)
+TheBattle.run_battle()
 
 
 #battle.attack_selection(battle, not_pokemon_func.Blastoise)
