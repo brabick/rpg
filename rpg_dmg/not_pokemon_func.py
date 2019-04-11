@@ -76,7 +76,7 @@ class battle:
 
         print("{}'s attacks are:".format(mon1.mon_name))
         for i in mon1.mon_attack_list:
-            print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type, i.attack_power))
+            print("Attack Name: {}, Power: {},".format(i.attack_name, i.attack_power))
             # ------------------------------------------------------------------------ #
             # Having wait statements staggers the information being printed to the screen
             # This makes the information more accessible
@@ -116,7 +116,6 @@ class battle:
                         mon_creation.player2_mon_list.remove(mon2)
                         print('{} has fainted!'.format(mon2.mon_name))
                         if len(mon_creation.player2_mon_list) > 0:
-                            #battle.print_turn_dmg.battle_txt = "{} has fainted!".format(mon2)
                             mon2 = mon_creation.player2_mon_list[randint(0, len(mon_creation.player2_mon_list) - 1)]
                             print("Trainer Joey sent out {}".format(mon2.mon_name))
                             battle.turn1(self, mon1, mon2)
@@ -186,7 +185,7 @@ class battle:
         mon_type = mon1.mon_type1
         if attack == mon_creation.fainted:
             print(" ")
-        elif effective(attack.attack_type, mon2.mon_type1) >= 2:
+        elif se.effective(attack.attack_type, mon2.mon_type1) >= 2:
             battle_txt = ('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
@@ -195,7 +194,7 @@ class battle:
                 battle_txt = "Nothing here"
             print(battle_txt)
             time.sleep(.5)
-        elif effective(attack.attack_type, mon2.mon_type1) < 1:
+        elif se.effective(attack.attack_type, mon2.mon_type1) < 1:
             print(attack.attack_type)
             battle_txt = ('{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
@@ -203,7 +202,7 @@ class battle:
                 mon2.hp_stat))
             print(battle_txt)
             time.sleep(.5)
-        elif effective(attack.attack_type, mon2.mon_type1) == 1:
+        elif se.effective(attack.attack_type, mon2.mon_type1) == 1:
             battle_txt = ('{} used {}, {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
@@ -253,63 +252,10 @@ class dmg_calc:
         if attack == mon_creation.fainted:
             dmg_calc.dmg_done = 0
         else:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * effective(attack.attack_type, mon2.mon_type1)
+            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * se.effective(attack.attack_type, mon2.mon_type1)
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
-        # elif se.super_effective(attack.attack_type, mon2.mon_type1) == False:
-        #     dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) / 2
-        #     mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-        #     return mon2.hp_stat
-        #
-        # else:
-        #     dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power)
-        #     mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-        #     return mon2.hp_stat
-        # damage_formula = move_attack_power + super_effective * 1/2 mon_atk_stat
 
-
-
-grass = {
-    "grass": .5,
-    "fire": .5,
-    "water": 2
-}
-water = {
-    "grass": .5,
-    "fire": 2,
-    "water": .5
-}
-fire = {
-    "grass": 2,
-    "fire": .5,
-    "water": .5
-}
-
-
-def effective(attack_type, mon_type):
-
-    # ------------------------------------------------------------------------ #
-    # 2 = super effective
-    # 1 = not very effective
-    # 0 = neutral
-    # ------------------------------------------------------------------------ #
-
-    if mon_type == grass:
-
-        multiplier = attack_type['grass']
-        print(multiplier)
-        return multiplier
-
-    elif mon_type == fire:
-
-        multiplier = attack_type['fire']
-        print(multiplier)
-        return multiplier
-    elif mon_type == water:
-
-        multiplier = attack_type['water']
-        print(multiplier)
-        return multiplier
 
 
 # ------------------------------------------------------------------------ #

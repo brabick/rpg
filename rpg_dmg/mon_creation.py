@@ -1,5 +1,5 @@
-from not_pokemon_func import create_attack, mon, fire, grass, water
-
+from not_pokemon_func import create_attack, mon
+from super_effective import fire, grass, water
 
 # ------------------------------------------------------------------------ #
 # creates first attacks.
@@ -12,14 +12,14 @@ frenzyplant = create_attack('Frenzy Plant', grass, 10)
 fireblast = create_attack('Fire Blast', fire, 10)
 hydropump = create_attack('Hydro Pump', water, 10)
 solarbeam = create_attack('Solarbeam', grass, 10)
-hyperbeam = create_attack('Hyper Beam', 'normal', 30)
+# hyperbeam = create_attack('Hyper Beam', 'normal', 30)
 fainted = create_attack('fainted', None, 0)
 # ------------------------------------------------------------------------ #
 # creates list of attacks for each mon.
 # ------------------------------------------------------------------------ #
 
 char_attacks = [blastburn, hydrocannon, frenzyplant]
-ven_attacks = [solarbeam, frenzyplant, hydropump, hyperbeam]
+ven_attacks = [solarbeam, frenzyplant, hydropump]
 blas_attacks = [hydrocannon, hydropump, fireblast]
 
 # ------------------------------------------------------------------------ #
