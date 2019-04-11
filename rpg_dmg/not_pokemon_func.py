@@ -21,6 +21,51 @@ mon_list = []
 
 
 # ------------------------------------------------------------------------ #
+# Class to represent a player, either human or CPU
+# Members:
+#   name:            Player name for printing.
+#
+#   type:            Valid types are 'human' or 'cpu'.
+#                    If human, ask for input when it's
+#                    this player's turn to attack;
+#                    If cpu, then run the attack automatically. (randomly?)
+#
+#   monsters:        player's list of mon objects for the battle
+#
+#   active_monster:  The current fighter.
+# ------------------------------------------------------------------------ #
+
+class player:
+    def __init__(self, name, playerType, monList):
+        self.name = name
+        self.type = playerType
+        self.monsters = monList
+        self.active_monster = None
+        
+
+    def choose(self):
+        if self.active_monster != None:
+            return
+        
+        if self.type == 'human':
+            for mon in self.monsters:
+                print(mon.mon_name)
+            mon_chosen = False
+
+            while mon_chosen == False:
+                mon1 = input("Choose your pokemon!\n").title()
+                for i in self.monsters:
+                    if mon1 == i.mon_name:
+                        self.active_monster = i
+                        mon_chosen = True
+                        print("{}, I choose you!".format(self.active_monster.mon_name))
+                        time.sleep(.3)
+                        return
+        else: # cpu
+            self.active_monster = self.monsters[randint(0, len(self.monsters) - 1)]
+            print("Trainer {} (CPU) sent out {}".format(self.name, self.active_monster.mon_name))
+        
+# ------------------------------------------------------------------------ #
 # Initial class used to make pokemon
 # Initializes variables to make them available later in
 # Program
@@ -64,121 +109,80 @@ class create_attack:
 # ------------------------------------------------------------------------ #
 
 class battle:
-    def __init__(self, mon1, mon2, attack1, attack2, damage_done, player1_mon_list):
-        self.mon1 = mon1
-        self.mon2 = mon2
-        self.attack1 = attack1
-        self.attack2 = attack2
-        self.damage_done = damage_done
-        self.player1_mon_list = player1_mon_list
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
+        
+#    def __init__(self, mon1, mon2, attack1, attack2, damage_done, player1_mon_list):
+#        self.mon1 = mon1
+#        self.mon2 = mon2
+#        self.attack1 = attack1
+#        self.attack2 = attack2
+#        self.damage_done = damage_done
+#        self.player1_mon_list = player1_mon_list
 
-    def turn1(self, mon1, mon2):
-
-        print("{}'s attacks are:".format(mon1.mon_name))
-        for i in mon1.mon_attack_list:
-            print("Attack Name: {}, Power: {},".format(i.attack_name, i.attack_power))
-            # ------------------------------------------------------------------------ #
-            # Having wait statements staggers the information being printed to the screen
-            # This makes the information more accessible
-            # ------------------------------------------------------------------------ #
-            time.sleep(.2)
-
-        attack_chosen = False
-        while attack_chosen == False:
-            # ------------------------------------------------------------------------ #
-            # While loop makes it so that if the user types an attack incorrectly
-            # They will go back into the loop and have to enter it again
-            # Until they enter an attack name correctly
-            # ------------------------------------------------------------------------ #
-            attack1 = input('Type the name of the attack for ' + mon1.mon_name + ' to use! \n').title()
-            for i in mon1.mon_attack_list:
-                if attack1 == i.attack_name:
-                    attack1 = i
-                    attack_chosen = True
-
-                    dmg_calc.dmg_done_calc(mon1, mon2, attack1)
-                    # ------------------------------------------------------------------------ #
-                    # Turns attack2 (the attack used by the opponent  into a random attack
-                    # from their attack list
-                    # ------------------------------------------------------------------------ #
-                    attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
-                    is_dead(mon2)
-                    battle.print_turn_dmg(battle, attack1, mon1, mon2)
-                    # ------------------------------------------------------------------------ #
-                    # First checks if the pokemon is dead (if the hp is 0)
-                    # If it does then it is removed from the list
-                    # Checks if the list of the opponents pokemon has any pokemon left in it
-                    # If they do the battle will continue, they will send out another random
-                    # pokemon and turn 1 will start again
-                    # If not, you win will print and the battle will end
-                    # ------------------------------------------------------------------------ #
-                    if mon2.dead == True:
-                        mon_creation.player2_mon_list.remove(mon2)
-                        print('{} has fainted!'.format(mon2.mon_name))
-                        if len(mon_creation.player2_mon_list) > 0:
-                            mon2 = mon_creation.player2_mon_list[randint(0, len(mon_creation.player2_mon_list) - 1)]
-                            print("Trainer Joey sent out {}".format(mon2.mon_name))
-                            battle.turn1(self, mon1, mon2)
-
-                        else:
-                            print("You win!")
-                    else:
-                        battle.turn2(self, mon2, mon1, attack2)
-
-    # ------------------------------------------------------------------------ #
-    # Turn 2 is very similar to turn 1, it just runs with the mons reversed
-    # and having to add attack 2 since which is chosen randomly.
-    # The other parts of the function work the same.
-    # ------------------------------------------------------------------------ #
-    def turn2(self, mon2, mon1, attack2):
-
-        dmg_calc.dmg_done_calc(mon2, mon1, attack2)
-        is_dead(mon1)
-        battle.print_turn_dmg(battle, attack2, mon2, mon1)
-
-        if mon1.dead == True:
-            print('{} has fainted!'.format(mon1.mon_name))
-            mon_creation.player1_mon_list.remove(mon1)
-            if len(mon_creation.player1_mon_list) > 0:
-                mon1 = battle.mon_selection(battle, mon_creation.player1_mon_list)
-                attack2 = mon_creation.fainted
-                if attack2 == mon_creation.fainted:
-                    battle.battle_txt = "Nothing here"
-                    battle.turn2(self, mon2, mon1, mon_creation.fainted)
-
-
-            else:
-                print("All of your pokemon have fainted! Better luck next time!")
-
+    def run_turn(self, attackingPlayer):
+        # first, make sure both players have an active monster
+        self.player1.choose()
+        self.player2.choose()
+        
+        if attackingPlayer == self.player1:
+            defendingPlayer = self.player2
         else:
-            print(end_of_turn[randint(0, len(end_of_turn) - 1)])
-            battle.turn1(self, mon1, mon2)
+            defendingPlayer = self.player1
+            
+        # next, select the attack
+        if attackingPlayer.type == 'human':
+            print("{}'s attacks are:".format(attackingPlayer.active_monster.mon_name))
+            for i in attackingPlayer.active_monster.mon_attack_list:
+                print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
+                # ------------------------------------------------------------------------ #
+                # Having wait statements staggers the information being printed to the screen
+                # This makes the information more accessible
+                # ------------------------------------------------------------------------ #
+                time.sleep(.2)
 
-    # ------------------------------------------------------------------------ #
-    # Mon selection assigns the user inputted mon to mon1 for turns 1 and 2
-    # This runs a similar while loop to as the attack selection one.
-    #
-    # ------------------------------------------------------------------------ #
-    def mon_selection(self, player1_mon_list):
-        for mon in player1_mon_list:
-            print(mon.mon_name)
-        mon_chosen = False
+            attack_chosen = False
+            while attack_chosen == False:
+                # ------------------------------------------------------------------------ #
+                # While loop makes it so that if the user types an attack incorrectly
+                # They will go back into the loop and have to enter it again
+                # Until they enter an attack name correctly
+                # ------------------------------------------------------------------------ #
+                attack = input('Type the name of the attack for ' + attackingPlayer.active_monster.mon_name + ' to use! \n').title()
+                for i in attackingPlayer.active_monster.mon_attack_list:
+                    if attack == i.attack_name:
+                        attack = i
+                        attack_chosen = True
+                        
+        else: # cpu is attacking
+            attack = attackingPlayer.active_monster.mon_attack_list[randint(0, (len(attackingPlayer.active_monster.mon_attack_list) - 1))]
 
-        while mon_chosen == False:
-            mon1 = input("Choose your pokemon!\n").title()
-            for i in player1_mon_list:
-                # for j in mon1.mon_attack_list.attack_name:
-                if mon1 == i.mon_name:
-                    mon1 = i
-                    mon_chosen = True
-                    print("{}, I choose you!".format(mon1.mon_name))
-                    time.sleep(.3)
-                    return mon1
+        # now, perform the attack
+        dmg_calc.dmg_done_calc(attackingPlayer.active_monster, defendingPlayer.active_monster, attack)
+        
+        # check for death
+        is_dead(defendingPlayer.active_monster)
+        
+        # print the battle results
+        self.print_turn_dmg(attack, attackingPlayer.active_monster, defendingPlayer.active_monster)
+        
+        # ------------------------------------------------------------------------ #
+        # First checks if the pokemon is dead (if the hp is 0)
+        # If it does then it is removed from the list.
+        # ------------------------------------------------------------------------ #
+        if defendingPlayer.active_monster.dead == True:
+            defendingPlayer.monsters.remove(defendingPlayer.active_monster)
+            print('{} has fainted!'.format(defendingPlayer.active_monster.mon_name))
+            defendingPlayer.active_monster = None
+        
 
     # ------------------------------------------------------------------------ #
     # Prints the formatted attack data with damage done, hp remaining and
     # attack used.  Uses the super effective function choose which statement to
     # print
+    # mon1 is the attacker
+    # mon2 is the defender
     # ------------------------------------------------------------------------ #
     def print_turn_dmg(self, attack, mon1, mon2):
         attack_type = attack.attack_type
@@ -210,19 +214,31 @@ class battle:
             print(battle_txt)
             time.sleep(.5)
 
+    def battle_is_over(self):
+        if len(self.player1.monsters) == 0:
+            print("{} won!".format(self.player2.name))
+            return True
+            
+        if len(self.player2.monsters) == 0:
+            print("{} won!".format(self.player1.name))
+            return True
+        
+        return False
+
 # ------------------------------------------------------------------------ #
 # The start battle function that is the core of the program (for now)
 # ------------------------------------------------------------------------ #
 
-class start_battle:
-    def new_battle(self, mon_list1):
-        mon1 = battle.mon_selection(battle, mon_list1)
-        mon2 = mon_creation.player2_mon_list[randint(0, len(mon_creation.player2_mon_list) - 1)]
-        print("Trainer Joey sent out {}!".format(mon2.mon_name))
-        time.sleep(.6)
-        # mon1 = battle.mon_selection.mon1
-        battle.turn1(battle, mon1, mon2)
+    def run_battle(self):
+        while(True):
+            self.run_turn(self.player1)
+            if (self.battle_is_over()):
+                break;
+            self.run_turn(self.player2)
+            if (self.battle_is_over()):
+                break;
 
+        print("Hope you enjoyed the battle.")
 
 # ------------------------------------------------------------------------ #
 # spd_check will end up being used to determine which
@@ -247,6 +263,10 @@ class dmg_calc:
     def __init__(self, dmg_done):
         self.dmg_done = dmg_done
 
+    # -----------------------------------------
+    # This function reduces mon2's hit points
+    # based on the attack by mon1.
+    # -----------------------------------------
     def dmg_done_calc(mon1, mon2, attack):
 
         if attack == mon_creation.fainted:
@@ -257,6 +277,8 @@ class dmg_calc:
             return mon2.hp_stat
 
 
+        mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
+        return mon2.hp_stat
 
 # ------------------------------------------------------------------------ #
 # Simple damage chart that is used to determine if the
