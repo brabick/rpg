@@ -386,6 +386,10 @@ fairy = {
     "fairy": 1
 }
 
+attack_type_list = [grass, fire, water, normal, fighting, flying, poison, ground, rock, bug, ghost,\
+             steel, electric, psychic, ice, dragon, dark, fairy]
+mon_type_list = ['grass', 'fire', 'water', 'normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost',\
+             'steel', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy']
 
 def effective(attack_type, mon_type):
 
@@ -396,74 +400,12 @@ def effective(attack_type, mon_type):
     # type dictionary.
     # ------------------------------------------------------------------------ #
 
-    if mon_type == grass:
-        multiplier = attack_type['grass']
-        return multiplier
-
-    elif mon_type == fire:
-        multiplier = attack_type['fire']
-        return multiplier
-
-    elif mon_type == water:
-        multiplier = attack_type['water']
-        return multiplier
-
-    elif mon_type == ice:
-        multiplier = attack_type['ice']
-        return multiplier
-
-    elif mon_type == rock:
-        multiplier = attack_type['rock']
-        return multiplier
-
-    elif mon_type == ground:
-        multiplier = attack_type['ground']
-        return multiplier
-
-    elif mon_type == fighting:
-        multiplier = attack_type['fighting']
-        return multiplier
-
-    elif mon_type == poison:
-        multiplier = attack_type['poison']
-        return multiplier
-
-    elif mon_type == bug:
-        multiplier = attack_type['bug']
-        return multiplier
-
-    elif mon_type == ghost:
-        multiplier = attack_type['ghost']
-        return multiplier
-
-    elif mon_type == steel:
-        multiplier = attack_type['steel']
-        return multiplier
-
-    elif mon_type == electric:
-        multiplier = attack_type['electric']
-        return multiplier
-
-    elif mon_type == psychic:
-        multiplier = attack_type['psychic']
-        return multiplier
-
-    elif mon_type == dragon:
-        multiplier = attack_type['dragon']
-        return multiplier
-
-    elif mon_type == dark:
-        multiplier = attack_type['dark']
-        return multiplier
-
-    elif mon_type == fairy:
-        multiplier = attack_type['fairy']
-        return multiplier
-    
-    elif mon_type == normal:
-        multiplier = attack_type['normal']
-        return multiplier
-
-    elif mon_type == flying:
-        multiplier = attack_type['flying']
-        return multiplier
+    for i in mon_type_list:
+        if i == mon_type:
+            i = mon_type
+            print(i)
+        for j in attack_type_list:
+            if j == attack_type:
+                j = attack_type
+                multiplier = j[i]
+                return multiplier
