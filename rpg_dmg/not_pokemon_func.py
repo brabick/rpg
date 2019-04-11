@@ -9,7 +9,7 @@
 from random import randint
 import time
 import mon_creation
-
+import super_effective as se
 
 # This is not pokemon
 # the only types so far
@@ -76,7 +76,7 @@ class battle:
 
         print("{}'s attacks are:".format(mon1.mon_name))
         for i in mon1.mon_attack_list:
-            print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
+            print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type, i.attack_power))
             # ------------------------------------------------------------------------ #
             # Having wait statements staggers the information being printed to the screen
             # This makes the information more accessible
@@ -103,7 +103,7 @@ class battle:
                     # ------------------------------------------------------------------------ #
                     attack2 = mon2.mon_attack_list[randint(0, (len(mon2.mon_attack_list) - 1))]
                     is_dead(mon2)
-                    battle.print_turn_dmg(battle, attack1, mon2)
+                    battle.print_turn_dmg(battle, attack1, mon1, mon2)
                     # ------------------------------------------------------------------------ #
                     # First checks if the pokemon is dead (if the hp is 0)
                     # If it does then it is removed from the list
@@ -135,7 +135,7 @@ class battle:
 
         dmg_calc.dmg_done_calc(mon2, mon1, attack2)
         is_dead(mon1)
-        battle.print_turn_dmg(battle, attack2, mon1)
+        battle.print_turn_dmg(battle, attack2, mon2, mon1)
 
         if mon1.dead == True:
             print('{} has fainted!'.format(mon1.mon_name))
@@ -181,33 +181,33 @@ class battle:
     # attack used.  Uses the super effective function choose which statement to
     # print
     # ------------------------------------------------------------------------ #
-    def print_turn_dmg(self, attack, mon):
+    def print_turn_dmg(self, attack, mon1, mon2):
         attack_type = attack.attack_type
-        mon_type = mon.mon_type1
+        mon_type = mon1.mon_type1
         if attack == mon_creation.fainted:
             print(" ")
-        elif super_effective(attack_type, mon_type) == True:
+        elif effective(attack.attack_type, mon2.mon_type1) >= 2:
             battle_txt = ('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
-                mon.mon_name, attack.attack_name,
-                mon.mon_name, dmg_calc.dmg_done,
-                mon.hp_stat))
+                mon1.mon_name, attack.attack_name,
+                mon2.mon_name, dmg_calc.dmg_done,
+                mon2.hp_stat))
             if attack == mon_creation.fainted:
                 battle_txt = "Nothing here"
             print(battle_txt)
             time.sleep(.5)
-        elif super_effective(attack_type, mon_type) == False:
+        elif effective(attack.attack_type, mon2.mon_type1) < 1:
             print(attack.attack_type)
             battle_txt = ('{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
-                mon.mon_name, attack.attack_name,
-                mon.mon_name, dmg_calc.dmg_done,
-                mon.hp_stat))
+                mon1.mon_name, attack.attack_name,
+                mon2.mon_name, dmg_calc.dmg_done,
+                mon2.hp_stat))
             print(battle_txt)
             time.sleep(.5)
-        elif super_effective(attack_type, mon_type) == None:
+        elif effective(attack.attack_type, mon2.mon_type1) == 1:
             battle_txt = ('{} used {}, {} took {} damage and has {} hp remaining'.format(
-                mon.mon_name, attack.attack_name,
-                mon.mon_name, dmg_calc.dmg_done,
-                mon.hp_stat))
+                mon1.mon_name, attack.attack_name,
+                mon2.mon_name, dmg_calc.dmg_done,
+                mon2.hp_stat))
             print(battle_txt)
             time.sleep(.5)
 
@@ -249,49 +249,73 @@ class dmg_calc:
         self.dmg_done = dmg_done
 
     def dmg_done_calc(mon1, mon2, attack):
+
         if attack == mon_creation.fainted:
             dmg_calc.dmg_done = 0
-        elif super_effective(attack.attack_type, mon2.mon_type1) == True:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * multiplier
-            mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-            return mon2.hp_stat
-        elif super_effective(attack.attack_type, mon2.mon_type1) == False:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) / 2
-            mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-            return mon2.hp_stat
-
         else:
-            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power)
+            dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * effective(attack.attack_type, mon2.mon_type1)
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
+        # elif se.super_effective(attack.attack_type, mon2.mon_type1) == False:
+        #     dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) / 2
+        #     mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
+        #     return mon2.hp_stat
+        #
+        # else:
+        #     dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power)
+        #     mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
+        #     return mon2.hp_stat
         # damage_formula = move_attack_power + super_effective * 1/2 mon_atk_stat
+
+
+
+grass = {
+    "grass": .5,
+    "fire": .5,
+    "water": 2
+}
+water = {
+    "grass": .5,
+    "fire": 2,
+    "water": .5
+}
+fire = {
+    "grass": 2,
+    "fire": .5,
+    "water": .5
+}
+
+
+def effective(attack_type, mon_type):
+
+    # ------------------------------------------------------------------------ #
+    # 2 = super effective
+    # 1 = not very effective
+    # 0 = neutral
+    # ------------------------------------------------------------------------ #
+
+    if mon_type == grass:
+
+        multiplier = attack_type['grass']
+        print(multiplier)
+        return multiplier
+
+    elif mon_type == fire:
+
+        multiplier = attack_type['fire']
+        print(multiplier)
+        return multiplier
+    elif mon_type == water:
+
+        multiplier = attack_type['water']
+        print(multiplier)
+        return multiplier
 
 
 # ------------------------------------------------------------------------ #
 # Simple damage chart that is used to determine if the
 # damage done by an attack is doubled or halved
 # ------------------------------------------------------------------------ #
-
-
-def super_effective(attack_type, mon_type):
-    global multiplier
-    # ------------------------------------------------------------------------ #
-    # used for damage calculation.  If true does double damage. If false does half (for now)
-    # 2 = super effective
-    # 1 = not very effective
-    # 0 = neutral
-    # ------------------------------------------------------------------------ #
-    if mon_type == 'fire' and attack_type == 'water':
-        multiplier = 6
-        return True
-    elif mon_type == 'water' and attack_type == 'grass':
-        multiplier = 6
-        return True
-    elif mon_type == 'grass' and attack_type == 'fire':
-        multiplier = 6
-        return True
-    else:
-        return False
 
 
 def is_dead(mon):
