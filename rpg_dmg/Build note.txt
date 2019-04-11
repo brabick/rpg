@@ -5,6 +5,7 @@ Key:
 
 
 Next steps for program (in no order):
+Expand stats.  I think I will just have one attack and one defence
 
 #Add the ability to choose pokemon for both sides.
 -->You can choose your mon, the opposing mon is chosen at random
