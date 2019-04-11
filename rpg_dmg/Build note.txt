@@ -9,11 +9,15 @@ Next steps for program (in no order):
 #Add the ability to choose pokemon for both sides.
 -->You can choose your mon, the opposing mon is chosen at random
 
-Expand type chart and super effective calc. Must include all types and and immunities.
+#Expand type chart and super effective calc. Must include all types and and immunities.
 {
     I'm thinking we can just assign the multiplier in damage calc a value of 0, .25, .5, 1, 2 or 4
     based on effectiveness
 }
+-->Now I need to figure out how to assign super effectiveness when there is more than one type.  I think I will just
+-->multiply the multipliers
+
+Expand type chart to be able to take in two types
 
 #Move mon, attack and player lists all to another file that is read and updated separately
 -->Moved and updated function file to reflect change in location.

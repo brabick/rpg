@@ -135,7 +135,7 @@ class battle:
         if attackingPlayer.type == 'human':
             print("{}'s attacks are:".format(attackingPlayer.active_monster.mon_name))
             for i in attackingPlayer.active_monster.mon_attack_list:
-                print("Attack Name: {}, Type: {}, Power: {},".format(i.attack_name, i.attack_type.title(), i.attack_power))
+                print("Attack Name: {}, Power: {},".format(i.attack_name, i.attack_power))
                 # ------------------------------------------------------------------------ #
                 # Having wait statements staggers the information being printed to the screen
                 # This makes the information more accessible
@@ -199,7 +199,6 @@ class battle:
             print(battle_txt)
             time.sleep(.5)
         elif se.effective(attack.attack_type, mon2.mon_type1) < 1:
-            print(attack.attack_type)
             battle_txt = ('{} used {}, it\'s not very effective... {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
