@@ -1,5 +1,5 @@
 from not_pokemon_func import create_attack, mon
-from super_effective import fire, grass, water
+from super_effective import fire, grass, water, rock, ice, ground
 
 # ------------------------------------------------------------------------ #
 # creates first attacks.
@@ -12,7 +12,15 @@ frenzyplant = create_attack('Frenzy Plant', grass, 10)
 fireblast = create_attack('Fire Blast', fire, 10)
 hydropump = create_attack('Hydro Pump', water, 10)
 solarbeam = create_attack('Solarbeam', grass, 10)
-# hyperbeam = create_attack('Hyper Beam', 'normal', 30)
+hyperbeam = create_attack('Hyper Beam', 'normal', 30)
+stoneedge = create_attack("Stone Edge", rock, 5)
+earthquake = create_attack('Earthquake', ground, 5)
+icebeam = create_attack('Ice Beam', ice, 5)
+
+
+# ------------------------------------------------------------------------ #
+# Only used when a mon faints
+# ------------------------------------------------------------------------ #
 fainted = create_attack('fainted', None, 0)
 # ------------------------------------------------------------------------ #
 # creates list of attacks for each mon.
@@ -21,7 +29,7 @@ fainted = create_attack('fainted', None, 0)
 char_attacks = [blastburn, hydrocannon, frenzyplant]
 ven_attacks = [solarbeam, frenzyplant, hydropump]
 blas_attacks = [hydrocannon, hydropump, fireblast]
-
+test_list =[stoneedge, earthquake, icebeam, frenzyplant]
 # ------------------------------------------------------------------------ #
 # creates pokemon.
 # Format: func(Mon name, mon type1, mon type 2, hp,
@@ -35,7 +43,8 @@ blas_attacks = [hydrocannon, hydropump, fireblast]
 player1_mon_list = [
     mon('Charizard', fire, None, 80, 10, 10, char_attacks),
     mon('Blastoise', water, None, 10, 10, 9, blas_attacks),
-    mon('Venusaur', grass, None, 10, 10, 10, ven_attacks)
+    mon('Venusaur', grass, None, 10, 10, 10, ven_attacks),
+    mon('Test', ground, None, 100, 10, 6, test_list)
 ]
 
 player2_mon_list = [
