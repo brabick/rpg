@@ -71,3 +71,15 @@ Build an interface (long term project)
 -->Abe completed this
 
 Implement STAB and critical hits
+
+
+Type chart weirdness:
+Attack type -- Mon Type
+Rock -- Grass ok
+Ground -- Grass ok
+Ice -- Grass ok
+rock -- water ok
+ground -- water NOT OK
+Ice -- Water NOT OK
+Ice -- Fire NOT OK
+Water -- Fire NOT OK

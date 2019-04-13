@@ -12,8 +12,8 @@ TheBattle.run_battle()
 # test = mon('Test', ground, 'ground', 100, 10, 6, test_list)
 # se.effective(ice, 'ground')
 
-#battle.attack_selection(battle, not_pokemon_func.Blastoise)
+# battle.attack_selection(battle, not_pokemon_func.Blastoise)
 
-#mon = not_pokemon_func.battle.mon_selection(battle, not_pokemon_func.player1_mon_list)
+# mon = not_pokemon_func.battle.mon_selection(battle, not_pokemon_func.player1_mon_list)
 
-#new_battle = battle.mon_selection(battle, not_pokemon_func.player1_mon_list)
+# new_battle = battle.mon_selection(battle, not_pokemon_func.player1_mon_list)

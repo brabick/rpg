@@ -10,6 +10,7 @@ from random import randint
 import time
 import mon_creation
 import super_effective as se
+import sys
 
 # This is not pokemon
 # the only types so far
@@ -25,7 +26,7 @@ mon_list = []
 # Members:
 #   name:            Player name for printing.
 #
-#   type:            Valid types are 'human' or 'cpu'.
+#   type:#           Valid types are 'human' or 'cpu'.
 #                    If human, ask for input when it's
 #                    this player's turn to attack;
 #                    If cpu, then run the attack automatically. (randomly?)
@@ -64,6 +65,10 @@ class player:
         else: # cpu
             self.active_monster = self.monsters[randint(0, len(self.monsters) - 1)]
             print("Trainer {} (CPU) sent out {}".format(self.name, self.active_monster.mon_name))
+
+
+
+
         
 # ------------------------------------------------------------------------ #
 # Initial class used to make pokemon
@@ -124,7 +129,7 @@ class battle:
         # first, make sure both players have an active monster
         self.player1.choose()
         self.player2.choose()
-        
+
         if attackingPlayer == self.player1:
             defendingPlayer = self.player2
         else:
@@ -153,8 +158,12 @@ class battle:
                     if attack == i.attack_name:
                         attack = i
                         attack_chosen = True
-                        
-        else: # cpu is attacking
+        # cpu is attacking
+        elif mon_creation.just_died == True:
+            attack = mon_creation.fainted
+            mon_creation.just_died = False
+
+        else:
             attack = attackingPlayer.active_monster.mon_attack_list[randint(0, (len(attackingPlayer.active_monster.mon_attack_list) - 1))]
 
         # now, perform the attack
@@ -162,19 +171,21 @@ class battle:
         
         # check for death
         is_dead(defendingPlayer.active_monster)
-        
+
+
         # print the battle results
         self.print_turn_dmg(attack, attackingPlayer.active_monster, defendingPlayer.active_monster)
-        
+
         # ------------------------------------------------------------------------ #
         # First checks if the pokemon is dead (if the hp is 0)
         # If it does then it is removed from the list.
         # ------------------------------------------------------------------------ #
+
         if defendingPlayer.active_monster.dead == True:
             defendingPlayer.monsters.remove(defendingPlayer.active_monster)
             print('{} has fainted!'.format(defendingPlayer.active_monster.mon_name))
             defendingPlayer.active_monster = None
-        
+            mon_creation.just_died = True
 
     # ------------------------------------------------------------------------ #
     # Prints the formatted attack data with damage done, hp remaining and
@@ -186,15 +197,14 @@ class battle:
     def print_turn_dmg(self, attack, mon1, mon2):
         attack_type = attack.attack_type
         mon_type = mon1.mon_type1
+
         if attack == mon_creation.fainted:
-            print(" ")
-        elif se.effective(attack.attack_type, mon2.mon_type1) >= 2:
+            print("")
+        elif se.effective(attack.attack_type, mon2.mon_type1) == 2:
             battle_txt = ('{} used {}, it\'s super effective! {} took {} damage and has {} hp remaining'.format(
                 mon1.mon_name, attack.attack_name,
                 mon2.mon_name, dmg_calc.dmg_done,
                 mon2.hp_stat))
-            if attack == mon_creation.fainted:
-                battle_txt = "Nothing here"
             print(battle_txt)
             time.sleep(.5)
         elif se.effective(attack.attack_type, mon2.mon_type1) < 1:
@@ -231,12 +241,12 @@ class battle:
         while(True):
             self.run_turn(self.player1)
             if (self.battle_is_over()):
-                break;
+                break
             self.run_turn(self.player2)
             if (self.battle_is_over()):
-                break;
+                break
 
-        print("Hope you enjoyed the battle.")
+    print("Hope you enjoyed the battle.")
 
 # ------------------------------------------------------------------------ #
 # spd_check will end up being used to determine which
@@ -248,7 +258,6 @@ def spd_check(mon1, mon2):
         return True
     else:
         return False
-
 
 # ------------------------------------------------------------------------ #
 # dmg_calc is a simple equation to determine the battle
@@ -266,17 +275,12 @@ class dmg_calc:
     # based on the attack by mon1.
     # -----------------------------------------
     def dmg_done_calc(mon1, mon2, attack):
-
         if attack == mon_creation.fainted:
             dmg_calc.dmg_done = 0
         else:
             dmg_calc.dmg_done = ((1 / 2 * mon1.atk_stat) + attack.attack_power) * se.effective(attack.attack_type, mon2.mon_type1)
             mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
             return mon2.hp_stat
-
-
-        mon2.hp_stat = mon2.hp_stat - dmg_calc.dmg_done
-        return mon2.hp_stat
 
 # ------------------------------------------------------------------------ #
 # Simple damage chart that is used to determine if the
@@ -285,6 +289,7 @@ class dmg_calc:
 
 
 def is_dead(mon):
+
     # ------------------------------------------------------------------------ #
     # checks if mon.hp_stat <= 0.  If so dead = true, prints message
     # and sets hp to 0 to prevent printing hp < 0
@@ -293,6 +298,8 @@ def is_dead(mon):
     if mon.hp_stat <= 0:
         mon.dead = True
         mon.hp_stat = 0
+        mon_creation.just_died = True
+
 
 # ------------------------------------------------------------------------ #
 # The large section above is all about creating the functions.  Below will

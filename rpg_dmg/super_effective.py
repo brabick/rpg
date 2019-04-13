@@ -386,9 +386,9 @@ fairy = {
     "fairy": 1
 }
 
-attack_type_list = [grass, fire, water, normal, fighting, flying, poison, ground, rock, bug, ghost,\
+attack_type_list = [grass, fire, water, normal, fighting, flying, poison, ground, rock, bug, ghost,
              steel, electric, psychic, ice, dragon, dark, fairy]
-mon_type_list = ['grass', 'fire', 'water', 'normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost',\
+mon_type_list = ['grass', 'fire', 'water', 'normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost',
              'steel', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy']
 
 def effective(attack_type, mon_type):
@@ -402,11 +402,11 @@ def effective(attack_type, mon_type):
 
     for i in mon_type_list:
         if i == mon_type:
-            i = mon_type
+            mon_type = i
         for j in attack_type_list:
             if j == attack_type:
-                j = attack_type
-                multiplier = j[i]
+                attack_type = j
+                multiplier = attack_type[mon_type]
                 return multiplier
 
 
