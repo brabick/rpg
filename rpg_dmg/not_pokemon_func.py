@@ -10,7 +10,6 @@ from random import randint
 import time
 import mon_creation
 import super_effective as se
-import sys
 
 # This is not pokemon
 # the only types so far
@@ -21,6 +20,7 @@ attack_list = []
 mon_list = []
 
 
+just_died = False
 # ------------------------------------------------------------------------ #
 # Class to represent a player, either human or CPU
 # Members:
@@ -42,7 +42,7 @@ class player:
         self.type = playerType
         self.monsters = monList
         self.active_monster = None
-        
+
 
     def choose(self):
         if self.active_monster != None:
@@ -116,7 +116,7 @@ class battle:
     def __init__(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
-        
+
 #    def __init__(self, mon1, mon2, attack1, attack2, damage_done, player1_mon_list):
 #        self.mon1 = mon1
 #        self.mon2 = mon2
@@ -159,9 +159,9 @@ class battle:
                         attack = i
                         attack_chosen = True
         # cpu is attacking
-        elif mon_creation.just_died == True:
+        elif just_died == True:
             attack = mon_creation.fainted
-            mon_creation.just_died = False
+            just_died = False
 
         else:
             attack = attackingPlayer.active_monster.mon_attack_list[randint(0, (len(attackingPlayer.active_monster.mon_attack_list) - 1))]
@@ -185,7 +185,7 @@ class battle:
             defendingPlayer.monsters.remove(defendingPlayer.active_monster)
             print('{} has fainted!'.format(defendingPlayer.active_monster.mon_name))
             defendingPlayer.active_monster = None
-            mon_creation.just_died = True
+            just_died = True
 
     # ------------------------------------------------------------------------ #
     # Prints the formatted attack data with damage done, hp remaining and
@@ -298,7 +298,7 @@ def is_dead(mon):
     if mon.hp_stat <= 0:
         mon.dead = True
         mon.hp_stat = 0
-        mon_creation.just_died = True
+        just_died = True
 
 
 # ------------------------------------------------------------------------ #

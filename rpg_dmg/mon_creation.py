@@ -54,7 +54,7 @@ player2_mon_list = [
 ]
 
 
-just_died = False
+
 
 if __name__ == "main":
     pass
