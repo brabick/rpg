@@ -144,7 +144,7 @@ player1_mon_list = [
     mon('Blastoise', 'water', None, 10, 10, 9, blas_attacks),
     mon('Venusaur', 'grass', 'poison', 10, 10, 10, ven_attacks),
     mon('Test', 'ground', None, 300, 15, 6, test_list),
-    mon('Mewtwo', 'psychic', None, 150, 25, 12, mewtwo_attacks)
+    mon('Mewtwo', 'psychic', None, 150, 25, 0, mewtwo_attacks)
 ]
 
 player2_mon_list = [

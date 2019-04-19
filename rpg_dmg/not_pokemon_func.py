@@ -12,13 +12,6 @@ import mon_creation
 import super_effective as se
 
 # This is not pokemon
-# the only types so far
-
-# empty list for attacks they get added from the attack class below
-attack_list = []
-# creating the pokemon class
-mon_list = []
-
 
 # ------------------------------------------------------------------------ #
 # Class to represent a player, either human or CPU
@@ -64,10 +57,6 @@ class player:
             self.active_monster = self.monsters[randint(0, len(self.monsters) - 1)]
             print("Trainer {} (CPU) sent out {}".format(self.name, self.active_monster.mon_name))
 
-
-
-
-        
 # ------------------------------------------------------------------------ #
 # Initial class used to make pokemon
 # Initializes variables to make them available later in
@@ -86,7 +75,6 @@ class mon:
         self.mon_type2 = mon_type2
         self.stats = {'hp': hp_stat, 'atk': atk_stat, 'spd': spd_stat}
         self.mon_attack_list = mon_attack_list
-        mon_list.append(mon)
 
 # ------------------------------------------------------------------------ #
 # creating attacks and adding them to the attack_list
@@ -99,8 +87,6 @@ class create_attack:
         self.attack_power = attack_power
         # creates attack as list
         attack = {'attack name': attack_name, 'attack type': attack_type, 'attack_power': attack_power}
-        attack_list.append(attack)
-
 
 # ------------------------------------------------------------------------ #
 # The battle class is the most complex part of the program
@@ -115,24 +101,17 @@ class battle:
     def __init__(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
-        
-#    def __init__(self, mon1, mon2, attack1, attack2, damage_done, player1_mon_list):
-#        self.mon1 = mon1
-#        self.mon2 = mon2
-#        self.attack1 = attack1
-#        self.attack2 = attack2
-#        self.damage_done = damage_done
-#        self.player1_mon_list = player1_mon_list
 
-    def run_turn(self, attackingPlayer):
+    def run_turn(self, attackingPlayer, defendingPlayer):
         # first, make sure both players have an active monster
         self.player1.choose()
         self.player2.choose()
-
-        if attackingPlayer == self.player1:
+        if spd_check(attackingPlayer.active_monster, defendingPlayer.active_monster):
+            attackingPlayer = self.player1
             defendingPlayer = self.player2
         else:
             defendingPlayer = self.player1
+            attackingPlayer = self.player2
             
         # next, select the attack
         if attackingPlayer.type == 'human':
@@ -245,10 +224,10 @@ class battle:
 
     def run_battle(self):
         while(True):
-            self.run_turn(self.player1)
+            self.run_turn(self.player1, self.player2)
             if (self.battle_is_over()):
                 break
-            self.run_turn(self.player2)
+            self.run_turn(self.player2, self.player1)
             if (self.battle_is_over()):
                 break
 
