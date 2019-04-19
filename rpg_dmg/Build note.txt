@@ -15,8 +15,10 @@ Expand stats.  I think I will just have one attack and one defence
     I'm thinking we can just assign the multiplier in damage calc a value of 0, .25, .5, 1, 2 or 4
     based on effectiveness
 }
+
 -->Now I need to figure out how to assign super effectiveness when there is more than one type.  I think I will just
 -->multiply the multipliers
+--> Done
 
 Expand type chart to be able to take in two types
 -->The first part of this is done. I have one for loop that I can go through twice, once for each type.
