@@ -391,7 +391,8 @@ attack_type_list = [grass, fire, water, normal, fighting, flying, poison, ground
 mon_type_list = ['grass', 'fire', 'water', 'normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost',
              'steel', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy']
 
-def effective(attack_type, mon_type):
+
+def effective(attack_type, mon_type1, mon_type2):
 
     # ------------------------------------------------------------------------ #
     # Takes the mon type and decides how to find the multiplier. It will place
@@ -399,15 +400,12 @@ def effective(attack_type, mon_type):
     # where the attack type is the is a stand in for the specific
     # type dictionary.
     # ------------------------------------------------------------------------ #
-
-    for i in mon_type_list:
-        if i == mon_type:
-            mon_type = i
-        for j in attack_type_list:
-            if j == attack_type:
-                attack_type = j
-                multiplier = attack_type[mon_type]
-                return multiplier
+    if mon_type2 is None:
+        multiplier = attack_type[mon_type1]
+        return multiplier
+    else:
+        multiplier = attack_type[mon_type1] * attack_type[mon_type2]
+        return multiplier
 
 
 if __name__ == "main":
