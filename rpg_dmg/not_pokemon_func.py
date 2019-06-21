@@ -102,93 +102,60 @@ class battle:
         self.player1 = player1
         self.player2 = player2
 
-    def run_turn(self, attackingPlayer, defendingPlayer):
+    def run_turn(self):
         # first, make sure both players have an active monster
         self.player1.choose()
         self.player2.choose()
-        if spd_check(attackingPlayer.active_monster, defendingPlayer.active_monster):
-            attackingPlayer = self.player1
-            defendingPlayer = self.player2
-            print(1)
 
-            print("{}'s attacks are:".format(attackingPlayer.active_monster.mon_name))
+        attackingPlayer = self.player1
+        defendingPlayer = self.player2
+        print(1)
+
+        print("{}'s attacks are:".format(attackingPlayer.active_monster.mon_name))
+        for i in attackingPlayer.active_monster.mon_attack_list:
+            print("Attack Name: {}, Power: {},".format(i.attack_name, i.attack_power))
+            # ------------------------------------------------------------------------ #
+            # Having wait statements staggers the information being printed to the screen
+            # This makes the information more accessible
+            # ------------------------------------------------------------------------ #
+            time.sleep(.2)
+            print(3)
+
+        attack_chosen = False
+        while attack_chosen == False:
+            # ------------------------------------------------------------------------ #
+            # While loop makes it so that if the user types an attack incorrectly
+            # They will go back into the loop and have to enter it again
+            # Until they enter an attack name correctly
+            # ------------------------------------------------------------------------ #
+            attack = input(
+                'Type the name of the attack for ' + attackingPlayer.active_monster.mon_name + ' to use! \n').title()
             for i in attackingPlayer.active_monster.mon_attack_list:
-                print("Attack Name: {}, Power: {},".format(i.attack_name, i.attack_power))
-                # ------------------------------------------------------------------------ #
-                # Having wait statements staggers the information being printed to the screen
-                # This makes the information more accessible
-                # ------------------------------------------------------------------------ #
-                time.sleep(.2)
-                print(3)
+                if attack == i.attack_name:
+                    attack = i
+                    attack_chosen = True
+                    dmg_calc.dmg_done_calc(attackingPlayer.active_monster, defendingPlayer.active_monster, attack)
+                    self.print_turn_dmg(attack, attackingPlayer.active_monster, defendingPlayer.active_monster)
 
-            attack_chosen = False
-            while attack_chosen == False:
-                # ------------------------------------------------------------------------ #
-                # While loop makes it so that if the user types an attack incorrectly
-                # They will go back into the loop and have to enter it again
-                # Until they enter an attack name correctly
-                # ------------------------------------------------------------------------ #
-                attack = input(
-                    'Type the name of the attack for ' + attackingPlayer.active_monster.mon_name + ' to use! \n').title()
-                for i in attackingPlayer.active_monster.mon_attack_list:
-                    if attack == i.attack_name:
-                        attack = i
-                        attack_chosen = True
-                        dmg_calc.dmg_done_calc(attackingPlayer.active_monster, defendingPlayer.active_monster, attack)
+                    attack = defendingPlayer.active_monster.mon_attack_list[
+                        randint(0, (len(defendingPlayer.active_monster.mon_attack_list) - 1))]
+                    print(5)
+                    dmg_calc.dmg_done_calc(defendingPlayer.active_monster, attackingPlayer.active_monster, attack)
+                    self.print_turn_dmg(attack, defendingPlayer.active_monster, attackingPlayer.active_monster)
+                    # cpu is attacking
+                    if mon_creation.just_died == True:
+                        attack = mon_creation.fainted
+                        mon_creation.just_died = False
+                        print(4)
 
-            attack = defendingPlayer.active_monster.mon_attack_list[
-                randint(0, (len(defendingPlayer.active_monster.mon_attack_list) - 1))]
-            print(5)
-            dmg_calc.dmg_done_calc(defendingPlayer.active_monster, attackingPlayer.active_monster, attack)
-        else:
-            defendingPlayer = self.player1
-            attackingPlayer = self.player2
-            print(2)
-            
-        # next, select the attack
+                    # now, perform the attack
 
-            print("{}'s attacks are:".format(defendingPlayer.active_monster.mon_name))
-            for i in defendingPlayer.active_monster.mon_attack_list:
-                print("Attack Name: {}, Power: {},".format(i.attack_name, i.attack_power))
-                # ------------------------------------------------------------------------ #
-                # Having wait statements staggers the information being printed to the screen
-                # This makes the information more accessible
-                # ------------------------------------------------------------------------ #
-                time.sleep(.2)
-                print(3)
 
-            attack_chosen = False
-            while attack_chosen == False:
-                # ------------------------------------------------------------------------ #
-                # While loop makes it so that if the user types an attack incorrectly
-                # They will go back into the loop and have to enter it again
-                # Until they enter an attack name correctly
-                # ------------------------------------------------------------------------ #
-                attack = input('Type the name of the attack for ' + defendingPlayer.active_monster.mon_name + ' to use! \n').title()
-                for i in defendingPlayer.active_monster.mon_attack_list:
-                    if attack == i.attack_name:
-                        attack = i
-                        attack_chosen = True
-                        dmg_calc.dmg_done_calc(defendingPlayer.active_monster, attackingPlayer.active_monster, attack)
-            attack = attackingPlayer.active_monster.mon_attack_list[
-                randint(0, (len(attackingPlayer.active_monster.mon_attack_list) - 1))]
-            print(5)
-            dmg_calc.dmg_done_calc(attackingPlayer.active_monster, defendingPlayer.active_monster, attack)
-        # cpu is attacking
-        if mon_creation.just_died == True:
-            attack = mon_creation.fainted
-            mon_creation.just_died = False
-            print(4)
-
-        # now, perform the attack
-
-        
-        # check for death
-        is_dead(defendingPlayer.active_monster)
+                    # check for death
+                    is_dead(defendingPlayer.active_monster)
 
 
         # print the battle results
-        self.print_turn_dmg(attack, attackingPlayer.active_monster, defendingPlayer.active_monster)
 
         # ------------------------------------------------------------------------ #
         # First checks if the pokemon is dead (if the hp is 0)
@@ -260,10 +227,10 @@ class battle:
 
     def run_battle(self):
         while(True):
-            self.run_turn(self.player1, self.player2)
+            self.run_turn()
             if (self.battle_is_over()):
                 break
-            self.run_turn(self.player2, self.player1)
+            self.run_turn()
             if (self.battle_is_over()):
                 break
 
