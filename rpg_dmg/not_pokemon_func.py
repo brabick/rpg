@@ -119,7 +119,6 @@ class battle:
             # This makes the information more accessible
             # ------------------------------------------------------------------------ #
             time.sleep(.2)
-            print(3)
 
         attack_chosen = False
         while attack_chosen == False:
@@ -134,19 +133,22 @@ class battle:
                 if attack == i.attack_name:
                     attack = i
                     attack_chosen = True
+                    # First mon damage calc
                     dmg_calc.dmg_done_calc(attackingPlayer.active_monster, defendingPlayer.active_monster, attack)
+                    # checks if the defending mon is dead
+                    is_dead(defendingPlayer.active_monster)
                     self.print_turn_dmg(attack, attackingPlayer.active_monster, defendingPlayer.active_monster)
+                    # Second mon attacks w/ damage calc
 
                     attack = defendingPlayer.active_monster.mon_attack_list[
                         randint(0, (len(defendingPlayer.active_monster.mon_attack_list) - 1))]
-                    print(5)
                     dmg_calc.dmg_done_calc(defendingPlayer.active_monster, attackingPlayer.active_monster, attack)
                     self.print_turn_dmg(attack, defendingPlayer.active_monster, attackingPlayer.active_monster)
                     # cpu is attacking
                     if mon_creation.just_died == True:
                         attack = mon_creation.fainted
                         mon_creation.just_died = False
-                        print(4)
+
 
                     # now, perform the attack
 
